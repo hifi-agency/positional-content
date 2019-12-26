@@ -1,0 +1,40 @@
+﻿<div class="positional-content__image-footer">
+    <div class="positional-content__breakpoint-controls">
+        <a href ng-click="item.add(modelValue, config, state)" title="Add new content">
+            <i class="icon icon-add"></i>
+        </a>
+        <span ng-if="cropper.isActive(modelValue, breakpoint)">
+            <a href="" ng-click="image.edit(modelValue, property.imageContentDataType, property.imageSettingsDataType, state)" title="Edit image content">
+                <i class="icon icon-edit"></i>
+            </a>
+            <a ng-href="{{state.breakpoints[breakpoint.name].cropLink}}" target="_blank" title="Preview crop in new window">
+                <i class="icon icon-picture"></i>
+            </a>
+            <a href target="_blank" ng-click="cropper.maximise(state)" title="Maximise crop">
+                <i class="icon icon-fullscreen"></i>
+            </a>
+            <span class="positional-content__scale-range">
+                <span>1</span>
+                <input type="range" min="1" step="0.01" ng-model="breakpoint.scale" value="{{breakpoint.scale}}" ng-change="cropper.setCropBorderWidth(state)" ng-mouseup="cropper.saveCropPosition(state)" class="slider" />
+                <span>{{scale.max(state)}}</span>
+            </span>
+
+            <span class="positional-content__breakpoint-controls-scale">
+                <input type="text" ng-model="breakpoint.scale" ng-change="cropper.validateScaleChange(state, breakpoint, '{{breakpoint.scale}}')" ng-blur="cropper.saveCropPosition(state)" select-on-click /><span>x</span>
+            </span>
+        </span>
+    </div>
+    <div class="positional-content__breakpoint-image-select">
+        <a href ng-click="image.openMediaPicker(modelValue, state)" prevent-default>
+            <i class="icon icon-out color-orange"></i> Change Image
+        </a>
+        <span ng-if="breakpoint">
+            <a href ng-click="breakpointService.openMediaPicker(breakpoint, modelValue, state)" ng-if="!breakpoint.imageId" prevent-default>
+                <i class="icon icon-axis-rotation-2 blue"></i> Override Image
+            </a>
+            <a href ng-click="breakpointService.removeImage(breakpoint, state)" ng-if="breakpoint.imageId" prevent-default>
+                <i class="icon icon-delete red"></i> Revert Image
+            </a>
+        </span>
+    </div>
+</div>

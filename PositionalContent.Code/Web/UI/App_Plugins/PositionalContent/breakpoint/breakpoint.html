@@ -1,0 +1,22 @@
+﻿<ul class="positional-content__breakpoints" ng-if="tabs && hasBreakpoints()">
+    <li ng-repeat="b in breakpointsAsArray()" ng-click="breakpoint.setActive(b, state)" ng-class="state.active.name == b.name ? 'positional-content__breakpoint__tab--active' : ''">
+        {{b.name}} <span class="positional-content__breakpoint-size-label" ng-if="hasBreakpoints()">{{breakpoint.sizeLabel(b, $index)}}</span>
+    </li>
+</ul>
+
+<span ng-if="!tabs">
+    <div class="positional-content__breakpoint" ng-repeat="b in breakpointsAsArray()" ng-show="state.active.name == b.name" ng-class="state.active.name == b.name ? 'positional-content__breakpoint--active' : ''">
+
+        <h5 class="positional-content__image-loader">Loading the preview image, please wait...</h5>
+
+        <div class="positional-content__image-wrapper">
+            <img class="positional-content__image" ng-src="{{image.getPreviewImage(b, state, config)}}" style="max-height: {{modelValue.editorZoom}}vh;" imageonload="onImageLoaded()" />
+            <positional-content-cropper breakpoint="b" property="property" state="state" model-value="modelValue"></positional-content-cropper>
+
+        </div>
+
+        <positional-content-breakpoint-controls breakpoint="b" state="state" model-value="modelValue" config="config" property="property"></positional-content-breakpoint-controls>
+
+    </div>
+</span>
+

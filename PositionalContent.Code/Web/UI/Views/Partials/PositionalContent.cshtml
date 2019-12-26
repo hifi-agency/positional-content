@@ -1,0 +1,90 @@
+﻿@using Hifi.PositionalContent;
+@using ClientDependency.Core.Mvc
+@model PositionalContentModel
+@{
+    var breakpoints = Model.BreakpointsAsList().ToList();
+    var cssRoot = "positional-content";
+    var cssSpecific = Model.CssNamespace;
+
+    Html.RequiresCss("~/App_Plugins/PositionalContent/positionalcontent-frontend.css");
+}
+
+@* NOTE: This RenderJsHere code should be put on your main template page where the rest of your script tags are placed *@
+@Html.RenderCssHere()
+
+<style type="text/css">
+    @Html.Partial("PositionalContentCss")
+</style>
+
+<figure class="@cssRoot">
+    <picture class="@(cssRoot)__image">
+        @foreach (var b in breakpoints)
+        {
+            var index = breakpoints.IndexOf(b);
+            if (index == 0)
+            {
+                <source media="(min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model)">
+            }
+            else if (index == breakpoints.Count - 1)
+            {
+                <source media="(max-width: @(b.BreakpointUpper)px)" srcset="@b.ImageUrl(Model)">
+            }
+            else
+            {
+                <source media="(max-width: @(b.BreakpointUpper)px) and (min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model)">
+            }
+        }
+        <img class="@(cssRoot)__image-inner" src="@breakpoints.FirstOrDefault().ImageUrl(Model)" alt="">
+    </picture>
+    <figcaption class="@(cssRoot)__content">
+        @foreach (var i in Model.Items)
+        {
+            @Html.Raw(string.Format("<div class='{0}-dimensions'>", cssRoot))
+
+            foreach (var d in i.Dimensions)
+            {
+                @Html.Raw(string.Format("<div class='{0}-dimensions__wrapper {0}-dimensions-{1}__wrapper--{2}' style='{3}'>", cssRoot, cssSpecific, d.Key, d.Value.PositionalStylesAsString()))
+            }
+
+            <div class="@(cssRoot)-dimensions__content @DimensionContentSetting(i.Dimensions, cssRoot, cssSpecific)">
+                @{Html.RenderAction("RenderItem", "PositionalContent", new { data = Model, item = i, area = "PositionalContent" });}
+            </div>
+
+            foreach (var d in i.Dimensions)
+            {
+                if (!d.Value.Hide && ((d.Value.HasContent && d.Value.OverrideContent) || (d.Value.HasSettings && d.Value.OverrideSettings)))
+                {
+                    @Html.Raw(string.Format("<div class='{0}-dimensions__content-override {0}-dimensions-{1}__content-override--{2}'>", cssRoot, cssSpecific, d.Key))
+                    <text>
+                        @{Html.RenderAction("RenderDimension", "PositionalContent", new { data = Model, item = i, dimension = d.Value, area = "PositionalContent" });}
+                    </text>
+                    @Html.Raw("</div>")
+                }
+            }
+
+            foreach (var d2 in i.Dimensions)
+            {
+                @Html.Raw("</div>")
+            }
+            @Html.Raw("</div>")
+
+        }
+    </figcaption>
+</figure>
+
+
+@functions {
+    public string DimensionContentSetting(Dictionary<string, PositionalContentItemDimension> dimensions, string cssRoot, string cssSpecific)
+    {
+        var output = new System.Text.StringBuilder();
+        foreach (var d in dimensions)
+        {
+            if ((d.Value.OverrideContent && d.Value.HasContent) || (d.Value.OverrideSettings && d.Value.HasSettings) || d.Value.Hide)
+            {
+                output.AppendFormat(" {0}-dimensions-{1}__content-hidden--{2}", cssRoot, cssSpecific, d.Key);
+            }
+        }
+        return output.ToString();
+    }
+}
+

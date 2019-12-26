@@ -1,0 +1,27 @@
+﻿@using Hifi.PositionalContent
+@inherits UmbracoViewPage<PositionalContentItemViewModel>
+@using Umbraco.Web.Templates
+
+@functions {
+    public static string EditorView(PositionalContentItemViewModel model)
+    {
+        string view = model.Content[0].ContentType.Alias;
+        view = view.ToLower(new System.Globalization.CultureInfo("en-US", false)).Replace(".html", ".cshtml");
+
+        if (!view.Contains("/")) {
+            view = "positionalcontent/" + view;
+        }
+
+        return view;
+    }
+}
+@try
+{
+    string editor = EditorView(Model);                                                       
+    <text>@Html.Partial(editor, (object)Model)</text>
+}
+catch (Exception ex)
+{
+    <h4 class="positional-content-exception">Something went wrong when rendering the preview, below is the exception detail:</h4>
+    <pre>@PositionalContentExtensionHelpers.GetInnerMessage(ex)</pre>
+}

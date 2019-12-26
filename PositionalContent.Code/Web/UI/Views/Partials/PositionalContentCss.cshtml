@@ -1,0 +1,108 @@
+﻿@using Hifi.PositionalContent;
+@model PositionalContentModel
+@{
+    var breakpointsInReverse = Model.BreakpointsAsList().Reverse().ToList();
+    if (breakpointsInReverse.Count < 2) {
+        breakpointsInReverse = new List<PositionalContentBreakpoint>();
+    }
+    var cssRoot = "positional-content";
+    var cssDimension = Model.CssNamespace;
+
+    var resetPositionContent = @"
+        bottom: auto!important;
+        height: 100%!important;
+        left: auto!important;
+        max-width: none!important;
+        position: relative;
+        right: auto!important;
+        top: auto!important;
+        width: 100%!important;";
+
+    var showPositionContent = @"display: block;";
+    var hidePositionContent = @"display: none;";
+}
+
+.positional-content-dimensions__content-override
+{
+    display: none;
+}
+
+@foreach (var b in breakpointsInReverse)
+{
+    var index = breakpointsInReverse.IndexOf(b);
+
+    if (index == 0)
+    {
+        <text>
+            @@media screen and (min-width: @(ApplyNudge(b.BreakpointUpper))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__wrapper--@b.Name {
+                    @resetPositionContent
+                }
+            }
+            @@media screen and (max-width: @(ApplyNudge(b.BreakpointUpper))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__content-hidden--@b.Name {
+                    @hidePositionContent
+                }
+                .@(cssRoot)-dimensions-@(cssDimension)__content-override--@b.Name {
+                    @showPositionContent
+                }
+            }
+        </text>
+    }
+    else if (index + 1 == breakpointsInReverse.Count)
+    {
+        <text>
+            @@media screen and (max-width: @(ApplyNudge(b.BreakpointLower))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__wrapper--@b.Name {
+                    @resetPositionContent
+                }
+            }
+            @@media screen and (min-width: @(ApplyNudge(b.BreakpointLower))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__content-hidden--@b.Name {
+                    @hidePositionContent
+                }
+                .@(cssRoot)-dimensions-@(cssDimension)__content-override--@b.Name {
+                    @showPositionContent
+                }
+            }
+        </text>
+    }
+    else
+    {
+        <text>
+            @@media screen and (min-width: 1px) and (max-width: @(ApplyNudge(b.BreakpointLower))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__wrapper--@b.Name {
+                    @resetPositionContent
+                }
+            }
+            @@media screen and (min-width: @(ApplyNudge(b.BreakpointUpper))px) and (max-width: 9999px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__wrapper--@b.Name {
+                    @resetPositionContent
+                }
+            }
+            @@media screen and (min-width: @(b.BreakpointLower)px) and (max-width: @(ApplyNudge(b.BreakpointUpper))px) {
+                .@(cssRoot)-dimensions-@(cssDimension)__content-hidden--@b.Name {
+                    @hidePositionContent
+                }
+                .@(cssRoot)-dimensions-@(cssDimension)__content-override--@b.Name {
+                    @showPositionContent
+                }
+            }
+        </text>
+    }
+
+}
+
+@functions {
+    public string ApplyNudge(int? value)
+    {
+        if(value != null)
+        {
+            decimal nudge = 0.1M;
+            int val = ((int)value);
+            decimal nudgedValued = val - nudge;
+            return nudgedValued.ToString(PositionalContentExtensionHelpers.NumberFormatInfo);
+        }
+        return "0";
+    }
+}

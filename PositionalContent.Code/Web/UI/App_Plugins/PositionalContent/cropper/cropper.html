@@ -1,0 +1,22 @@
+﻿<div ng-if="cropper.isActive(modelValue, breakpoint)">
+    <div class="positional-content__cropper-left-border" style="width: {{breakpoint.left}}%"></div>
+    <div class="positional-content__cropper-top-border" style="height: {{breakpoint.top}}%"></div>
+    <div class="positional-content__cropper"
+         style="width: {{cropper.width(state, modelValue)}}%; height: {{cropper.height(state, modelValue)}}%; left: {{breakpoint.left}}%; top: {{breakpoint.top}}%"
+         positional-content-move move-stop="saveCropPosition" move-drag="onDrag" move-constrain-to="positional-content__image-wrapper" ng-if="!state.responsivePreview">
+
+        <positional-content-items property="property" state="state" model-value="modelValue"></positional-content-items>
+
+    </div>
+    <div class="positional-content__cropper" style="width: {{cropper.width(state, modelValue)}}%; height: {{cropper.height(state, modelValue)}}%; left: {{breakpoint.left}}%; top: {{breakpoint.top}}%" ng-if="state.responsivePreview">
+        <img style="width:100%; height: 100%;" src="{{state.breakpoints[breakpoint.name].cropLink}}" />
+        <positional-content-items property="property" state="state" model-value="modelValue"></positional-content-items>
+    </div>
+    <div class="positional-content__cropper-bottom-border" style="height: {{breakpoint.bottom}}%"></div>
+    <div class="positional-content__cropper-right-border" style="width: {{breakpoint.right}}%"></div>
+</div>
+<div ng-if="!cropper.isActive(modelValue, breakpoint)">
+    <positional-content-items property="property" state="state" model-value="modelValue" constrain-to="'positional-content__image-wrapper'"></positional-content-items>
+</div>
+
+

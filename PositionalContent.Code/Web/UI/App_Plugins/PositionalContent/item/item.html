@@ -1,0 +1,51 @@
+﻿<div data-id="{{i.id}}" class="positional-content__item" style="{{ item.positionalStyles(i, dimension(i), state) }};"
+     ng-repeat="i in modelValue.items"
+     positional-content-move move-stop="saveItem" move-bound-element="positional-content__item-wrapper" move-constrain-to="{{constrainTo}}" move-disabled="{{readOnly}}"
+     positional-content-resize resize-stop="saveItem" resize-scale="{{scale.breakpointValue(state)}}" resize-constrain-to="{{constrainTo}}" resize-disabled="{{readOnly}}">
+
+    <span class="positional-content__item-wrapper">
+        <span class="positional-content__item-marker" ng-if="i.content == undefined || i.content == ''">
+            {{i.id}}
+        </span>
+        <div class="positional-content__item-preview {{dimension(i).hide ? 'positional-content__item-preview-hide' : ''}}" ng-if="i.content && i.content != ''">
+            <div class="positional-content__item-preview-wrapper" ng-bind-html="item.trustedHtml(i.preview)"></div>
+        </div>
+        <span class="positional-content__item-id" style="transform:scale({{scale.inverse(state)}});" ng-if="i.content && i.content != ''">
+            {{i.id}}
+        </span>
+    </span>
+
+    <div ng-if="!readOnly" class="positional-content__item-controls positional-content__item-controls-settings{{ dimension(i).pinToRight ? '-right' : '-left' }}" style="{{ inlineEditorPosition(dimension(i), state) }} transform:scale({{scale.inverse(state)}});">
+        <a class="positional-content__edit-item" title="Edit item content" href="" ng-click="item.edit(i, property.itemContentDataType, property.itemSettingsDataType, state, modelValue)">
+            <i class="icon icon-edit"></i>
+        </a>
+        <a class="positional-content__edit-item" title="Center horizontally" href="" ng-click="item.centerHorizontal(dimension(i))">
+            <i class="icon icon-navigation-horizontal"></i>
+        </a>
+        <a class="positional-content__edit-item" title="Center vertically" href="" ng-click="item.centerVertical(dimension(i))">
+            <i class="icon icon-navigation-vertical"></i>
+        </a>
+        <a class="positional-content__remove-item" href="" ng-click="item.remove($index, modelValue)">
+            <i class="icon icon-delete"></i>
+        </a>
+    </div>
+    <div class="positional-content__resize-control positional-content__resize-control-left" style="transform:scaleX({{scale.inverse(state)}}); margin-left: calc(-15px * {{scale.inverse(state)}});">
+        <span class="positional-content__resize-control--marker positional-content__resize-control--marker-vertical"></span>
+    </div>
+    <div class="positional-content__resize-control positional-content__resize-control-right" style="transform:scaleX({{scale.inverse(state)}}); margin-right: calc(-15px * {{scale.inverse(state)}});">
+        <span class="positional-content__resize-control--marker positional-content__resize-control--marker-vertical"></span>
+    </div>
+    <div class="positional-content__resize-control positional-content__resize-control-top" style="transform:scaleY({{scale.inverse(state)}}); top: calc(-15px * {{scale.inverse(state)}});">
+        <span class="positional-content__resize-control--marker positional-content__resize-control--marker-horizontal"></span>
+    </div>
+    <div class="positional-content__resize-control positional-content__resize-control-bottom" style="transform:scaleY({{scale.inverse(state)}}); margin-bottom: calc(-15px * {{scale.inverse(state)}}); ">
+        <span class="positional-content__resize-control--marker positional-content__resize-control--marker-horizontal"></span>
+    </div>
+
+</div>
+
+
+
+
+
+

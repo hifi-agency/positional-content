@@ -1,0 +1,45 @@
+﻿/*Copyright © 2018 HiFi Ltd - All Rights Reserved
+ * This file is part of Positional Content which is released under the HiFi Positional Content License.
+ * Please visit : http://www.positionalcontent.com/PositionalContentLicenseAgreement.pdf for full license details
+ */
+
+.positional-content {
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.positional-content__image {
+    display: block
+}
+
+.positional-content__image-inner {
+    display: block;
+    margin: 0;
+    width: 100%
+}
+
+.positional-content__content {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%
+}
+
+.positional-content-dimensions {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%
+}
+
+.positional-content-dimensions__wrapper {
+    position: absolute
+}
+
+.positional-content-dimensions__content {
+    height: 100%;
+}

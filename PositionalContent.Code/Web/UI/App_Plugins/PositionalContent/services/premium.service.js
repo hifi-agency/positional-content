@@ -19,8 +19,6 @@ angular.module('umbraco').factory('HiFi.PositionalContent.PremiumServices', [
             init: function () {
                 _isPremium = true;
 
-                $injector.get('HiFi.PositionalContent.Premium.BreakpointService');
-
                 try { _globalControls = $injector.get('HiFi.PositionalContent.Premium.GlobalControlsService'); } catch { _isPremium = false; };
                 try { _breakpoint = $injector.get('HiFi.PositionalContent.Premium.BreakpointService'); } catch (ex) { _isPremium = false; };
                 try { _cropper = $injector.get('HiFi.PositionalContent.Premium.CropperService'); } catch { _isPremium = false; };

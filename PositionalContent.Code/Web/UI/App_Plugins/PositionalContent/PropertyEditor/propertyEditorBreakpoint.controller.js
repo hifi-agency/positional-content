@@ -19,7 +19,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyBreakpoints
 
         $scope.remove = function (index) {
             if (window.confirm("Are you sure?")) {
-                $scope.model.value.items.splice(index, 1);
+                $scope.model.value.splice(index, 1);
             }
         };
 

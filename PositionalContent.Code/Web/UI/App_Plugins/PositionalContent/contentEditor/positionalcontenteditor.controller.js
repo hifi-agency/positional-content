@@ -163,7 +163,9 @@ angular.module("umbraco").controller("HiFi.PositionalContentDialogController", [
 
         };
 
-        $scope.close = $scope.model.close;
+        $scope.close = function () {
+            editorService.close();
+        }
 
         $scope.save = function () {
             $scope.$broadcast("formSubmitting");

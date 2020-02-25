@@ -97,7 +97,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
 
         resources.getDataTypeByAlias(currentSection, nodeContext.contentTypeAlias, propAlias)
             .then(function (dataType2) {
-                if (dataType2.guid)
+                if (dataType2 && dataType2.guid)
                     $scope.model.value.dtdGuid = dataType2.guid;
             })
             .then(function () {

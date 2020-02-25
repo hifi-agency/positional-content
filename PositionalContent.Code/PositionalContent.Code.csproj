@@ -268,6 +268,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Web\UI\Views\Partials\PositionalContent.cshtml" />
+    <None Include="Web\UI\Views\Partials\PositionalContentCss.cshtml" />
+    <None Include="Web\UI\Views\Partials\PositionalContent\Base.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web\UI\App_Plugins\PositionalContent\breakpointControls\breakpointControls.directive.js" />

@@ -9,13 +9,13 @@ using Newtonsoft.Json;
 
 namespace Hifi.PositionalContent
 {
-    public class PositionalContentPropertyConvertor : PropertyValueConverterBase
+    public class PositionalContentPropertyConvertor : PropertyValueConverterBase, IPropertyValueConverter
     {
         public override bool IsConverter(IPublishedPropertyType propertyType)
             => propertyType.EditorAlias == "HiFi.PositionalContent";
 
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType)
-            => typeof(string);
+            => typeof(PositionalContentModel);
 
         public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType)
             => PropertyCacheLevel.Snapshot;

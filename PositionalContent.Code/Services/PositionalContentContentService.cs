@@ -8,6 +8,7 @@ using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Web.Composing;
+using System.Collections;
 
 namespace Hifi.PositionalContent
 {
@@ -66,6 +67,15 @@ namespace Hifi.PositionalContent
                 // but with JSON it doesn't, so we try this first
                 var converted1 = properyType.ConvertInterToObject(null, PropertyCacheLevel.Element, source, inPreviewMode);
                 if (converted1 is T) return (T)converted1;
+
+                // If List IPublishedElements, try to convert to that
+                // as List of ModelsBuilder types won't automatically convert to List of IPublishedElements
+                if (converted1 is IEnumerable && typeof(T) == typeof(List<IPublishedElement>))
+                {
+                    var collection = converted1 as IEnumerable;
+                    object listOfElements = collection.Cast<IPublishedElement>().ToList();
+                    if (listOfElements is T) return (T)listOfElements;
+                }
 
                 var convertAttempt = converted1.TryConvertTo<T>();
                 if (convertAttempt.Success) return convertAttempt.Result;

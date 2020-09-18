@@ -122,6 +122,7 @@ namespace Hifi.PositionalContent
                 try
                 {
                     var value = JsonConvert.DeserializeObject<PositionalContentModel>(property.GetValue(culture, segment).ToString());
+                    FixImageIds(value);
                     if (value.Items != null)
                     {
 
@@ -253,6 +254,35 @@ namespace Hifi.PositionalContent
                 }
                 return null;
             }
+
+            protected void FixImageIds(PositionalContentModel model)
+            {
+                if(model != null)
+                {
+                    if(model.PrimaryImage != null)
+                    {
+                        model.PrimaryImage.ImageId = FixImageId(model.PrimaryImage.ImageId);
+                    }
+                    foreach (var i in model.Breakpoints)
+                    {
+                        i.Value.ImageId = FixImageId(i.Value.ImageId);
+                    }
+                }
+            }
+
+            protected string FixImageId(string input)
+            {
+                if (input != null && input.Length < 6)
+                {
+                    var currentImage = Current.UmbracoHelper.Media(input);
+                    if (currentImage != null)
+                    {
+                        return currentImage.Key.ToString();
+                    }
+                }
+                return input;
+            }
+
         }
 
         #endregion

@@ -9,4 +9,4 @@ ECHO APPVEYOR_BUILD_NUMBER : %APPVEYOR_BUILD_NUMBER%
 ECHO APPVEYOR_BUILD_VERSION : %APPVEYOR_BUILD_VERSION%
 
 Call Tools\nuget.exe restore ..\PositionalContent.sln
-CALL "%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MsBuild.exe" build\package.proj
+CALL "%programfiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MsBuild.exe" package.proj

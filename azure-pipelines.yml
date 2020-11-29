@@ -1,0 +1,71 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- azure-pipelines
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  packageSuffix: 'beta'
+  version: '2.0.2'
+  ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+    revision: $[ counter('.', 0) ]
+    separator: '.'
+  ${{ if eq( variables['Build.SourceBranchName'], 'master') }}:
+    revision: ''
+    separator: ''
+
+name: $(version)$(separator)$(revision)
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: BatchScript@1
+  inputs:
+    filename: BuildPackage/build-azure-devops.bat
+    #arguments: # Optional
+    #modifyEnvironment: False # Optional
+    #workingFolder: # Optional
+    #failOnStandardError: false # Optional
+
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '2da32941-9b33-449c-ae98-69ead285ebf1/c6702797-d178-4071-86d1-88c556b7ba05'
+
+- task: CopyFiles@2
+  displayName: 'Copy package files from BuildPackage/artifacts to staging directory'
+  inputs:     
+    SourceFolder: 'artifacts'
+    Contents: '*.*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

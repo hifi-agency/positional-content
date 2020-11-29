@@ -4,7 +4,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- azure-pipelines
+- master
+- dev
 
 pool:
   vmImage: 'vs2017-win2016'

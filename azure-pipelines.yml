@@ -59,7 +59,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy package files from BuildPackage/artifacts to staging directory'
   inputs:     
-    SourceFolder: 'artifacts'
+    SourceFolder: 'BuildPackage/artifacts'
     Contents: '*.*'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     CleanTargetFolder: true

@@ -22,5 +22,6 @@
   <files>
      <file src="PositionalContent.Code\bin\Release\HiFi.PositionalContent.dll" target="lib\net472" />
      <file src="PositionalContent.Code\Web\UI\App_Plugins\PositionalContent\**\*.*" target="Content\App_Plugins\PositionalContent\" />
+     <file src="PositionalContent.Code\Web\UI\Views\Partials\**\*.*" target="Content\Views\Partials\" />
   </files>
 </package>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>HiFi.PositionalContent</id>
+    <version>2.0.2</version>
+    <title>HiFi.PositionalContent</title>
+    <authors>Phil Whittaker</authors>
+    <owners>Phil Whittaker</owners>
+    <projectUrl>http://www.positionalcontent.com</projectUrl>
+    <iconUrl>http://media.positionalcontent.com/assets/logo/large.jpg</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>An umbraco property editor that stores and manages the positional relationship between image and content</description>
+    <summary>An umbraco property editor that stores and manages the positional relationship between image and content</summary>
+    <copyright>Hi-Fi Ltd</copyright>
+    <licenseUrl>http://www.opensource.org/licenses/MIT</licenseUrl>
+    <language>en-GB</language>
+    <tags>umbraco</tags>
+    <files>
+     <file src="PositionalContent.Code\bin\Release\HiFi.PositionalContent.dll" target="lib\net472" />
+     <file src="PositionalContent.Code\Web\UI\App_Plugins\PositionalContent\**\*.*" target="Content\App_Plugins\PositionalContent\" />
+    </files>
+    <dependencies>
+      <dependency id="UmbracoCms.Core" version="8.1.0" />
+    </dependencies>
+  </metadata>
+</package>

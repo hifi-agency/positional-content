@@ -26,44 +26,58 @@ variables:
 name: $(version)$(separator)$(revision)
 
 steps:
+- task: Assembly-Info-NetFramework@2
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\AssemblyInfo.cs
+
+      **\AssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    VersionNumber: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
+    InformationalVersion: '$(Build.BuildNumber)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
+
+steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
-- task: BatchScript@1
+- task: CmdLine@2
+  displayName: Install umbpack
   inputs:
-    filename: BuildPackage/build-azure-devops.bat
-    #arguments: # Optional
-    #modifyEnvironment: False # Optional
-    #workingFolder: # Optional
-    #failOnStandardError: false # Optional
+    script: 'dotnet tool install --global Umbraco.Tools.Packages'
 
-- task: VSTest@2
+- task: CmdLine@2
+  displayName: Umbpack pack
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
+    script: 'umbpack pack HiFi.PositionalContent.umb.xml -o $(Build.ArtifactStagingDirectory) -v $(Build.BuildNumber)'
 
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'HiFi.PositionalContent.nuspec'
+    versioningScheme: 'byBuildNumber'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'HiFi.PositionalContent.Core.nuspec'
+    versioningScheme: 'byBuildNumber'    
+  
 - task: NuGetCommand@2
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '2da32941-9b33-449c-ae98-69ead285ebf1/c6702797-d178-4071-86d1-88c556b7ba05'
-
-- task: CopyFiles@2
-  displayName: 'Copy package files from BuildPackage/artifacts to staging directory'
-  inputs:     
-    SourceFolder: 'BuildPackage/artifacts'
-    Contents: '*.*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    CleanTargetFolder: true
-    OverWrite: true
 
 - task: PublishBuildArtifacts@1
   inputs:

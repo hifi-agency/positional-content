@@ -49,6 +49,13 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
 - task: CmdLine@2
   displayName: Install umbpack
   inputs:

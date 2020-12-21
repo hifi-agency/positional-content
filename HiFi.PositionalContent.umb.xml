@@ -21,7 +21,7 @@
   </info>
   <files>
     <folder path="PositionalContent.Code\Web\UI\App_Plugins\PositionalContent" orgPath="App_Plugins/PositionalContent" /> 
-    <file path="PositionalContent.Code/bin/Debug/HiFi.PositionalContent.dll" orgPath="bin/HiFi.PositionalContent.dll" />
+    <file path="PositionalContent.Code/bin/Release/HiFi.PositionalContent.dll" orgPath="bin/HiFi.PositionalContent.dll" />
   </files>
   <Actions />
   <control />

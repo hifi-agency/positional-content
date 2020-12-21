@@ -15,12 +15,12 @@
     <licenseUrl>http://www.opensource.org/licenses/MIT</licenseUrl>
     <language>en-GB</language>
     <tags>umbraco</tags>
-    <files>
-     <file src="PositionalContent.Code\bin\Release\HiFi.PositionalContent.dll" target="lib\net472" />
-     <file src="PositionalContent.Code\Web\UI\App_Plugins\PositionalContent\**\*.*" target="Content\App_Plugins\PositionalContent\" />
-    </files>
     <dependencies>
       <dependency id="UmbracoCms.Core" version="8.1.0" />
     </dependencies>
   </metadata>
+  <files>
+     <file src="PositionalContent.Code\bin\Release\HiFi.PositionalContent.dll" target="lib\net472" />
+     <file src="PositionalContent.Code\Web\UI\App_Plugins\PositionalContent\**\*.*" target="Content\App_Plugins\PositionalContent\" />
+  </files>
 </package>

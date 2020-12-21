@@ -15,7 +15,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   packageSuffix: 'beta'
-  version: '2.0.3'
+  version: '2.0.4'
   ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
     revision: $[ counter('.', 0) ]
     separator: '.'

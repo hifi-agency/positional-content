@@ -5,35 +5,28 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Web.Http;
+using umbraco;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
-using Umbraco.Web.Composing;
 
 namespace Hifi.PositionalContent
 {
     [PluginController("PositionalContentApi")]
     public class PositionalContentBackofficeController : UmbracoAuthorizedJsonController
     {
-        private readonly PropertyEditorCollection propertyEditors;
-
-        public PositionalContentBackofficeController(PropertyEditorCollection propertyEditors)
-        {
-            this.propertyEditors = propertyEditors;
-        }
-
         public IEnumerable<object> GetNestedContentDataTypes()
         {
-            var r = Services.DataTypeService.GetAll()
-                .Where(x => x.EditorAlias == "Our.Umbraco.NestedContent" || x.EditorAlias == "Umbraco.NestedContent")
+            var r = Services.DataTypeService.GetAllDataTypeDefinitions()
+                .Where(x => x.PropertyEditorAlias == "Our.Umbraco.NestedContent" || x.PropertyEditorAlias == "Umbraco.NestedContent")
                 .OrderBy(x => x.Name)
                 .Select(x => new
                 {
                     guid = x.Key,
                     name = x.Name,
-                    propertyEditorAlias = x.EditorAlias
+                    propertyEditorAlias = x.PropertyEditorAlias
                 })
                 .ToList();
 
@@ -50,7 +43,7 @@ namespace Hifi.PositionalContent
         {
             if(id != new Guid())
             {
-                var dtd = Services.DataTypeService.GetDataType(id);
+                var dtd = Services.DataTypeService.GetDataTypeDefinitionById(id);
                 return FormatDataType(dtd);
             }
             return null;
@@ -60,8 +53,8 @@ namespace Hifi.PositionalContent
         {
             IContentTypeComposition ct = null;
 
-            var r = Services.DataTypeService.GetAll()
-                .Where(x => x.EditorAlias == "HiFi.PositionalContent").ToList();
+            var r = Services.DataTypeService.GetAllDataTypeDefinitions()
+                .Where(x => x.PropertyEditorAlias == "HiFi.PositionalContent").ToList();
 
             switch (contentType)
             {
@@ -69,10 +62,10 @@ namespace Hifi.PositionalContent
                     ct = Services.MemberTypeService.Get(contentTypeAlias);
                     break;
                 case "content":
-                    ct = Services.ContentTypeService.Get(contentTypeAlias);
+                    ct = Services.ContentTypeService.GetContentType(contentTypeAlias);
                     break;
                 case "media":
-                    ct = Services.ContentTypeService.Get(contentTypeAlias);
+                    ct = Services.ContentTypeService.GetMediaType(contentTypeAlias);
                     break;
             }
 
@@ -83,25 +76,28 @@ namespace Hifi.PositionalContent
             if (prop == null)
                 return null;
 
-            var dtd = Services.DataTypeService.GetDataType(prop.DataTypeId);
+            var dtd = Services.DataTypeService.GetDataTypeDefinitionById(prop.DataTypeDefinitionId);
             return FormatDataType(dtd);
         }
 
-        protected object FormatDataType(IDataType dataType)
+        protected object FormatDataType(IDataTypeDefinition dtd)
         {
-            if (dataType == null)
+            if (dtd == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            var propEditor = propertyEditors[dataType.EditorAlias];
-            var config = propEditor.GetConfigurationEditor().ToValueEditor(dataType.Configuration);
-            var valueEditor = propEditor.GetValueEditor();
+            var propEditor = PropertyEditorResolver.Current.GetByAlias(dtd.PropertyEditorAlias);
+
+            // Force converter before passing prevalues to view
+            var preValues = Services.DataTypeService.GetPreValuesCollectionByDataTypeId(dtd.Id);
+            var convertedPreValues = propEditor.PreValueEditor.ConvertDbToEditor(propEditor.DefaultPreValues,
+                preValues);
 
             return new
             {
-                guid = dataType.Key,
-                propertyEditorAlias = dataType.EditorAlias,
-                preValues = config,
-                view = valueEditor.View
+                guid = dtd.Key,
+                propertyEditorAlias = dtd.PropertyEditorAlias,
+                preValues = convertedPreValues,
+                view = propEditor.ValueEditor.View
             };
         }
     }

@@ -1,0 +1,34 @@
+﻿@using Hifi.PositionalContent
+@using Umbraco.Web
+@inherits UmbracoViewPage<PositionalContentItemViewModel>
+
+<style type="text/css">
+
+    .content-flash-image {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+
+    .content-image__inner {
+        display: block;
+        max-height: 100%;
+        max-width: 100%;  
+    }
+
+</style>
+
+@{
+    var item = Model.Content.FirstOrDefault();
+    var settings = Model.Settings.FirstOrDefault();
+    var image = Umbraco.TypedMedia(item.GetPropertyValue<string>("image"));
+}
+
+@if (image != null)
+{
+    <div class="content-image">
+        <img src="@image.Url" class="content-image__inner">
+    </div>
+}
+
+

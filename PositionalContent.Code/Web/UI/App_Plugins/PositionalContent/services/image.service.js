@@ -8,9 +8,9 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
     '$window',
     'mediaResource',
     'mediaHelper',
-    'editorService',
+    'dialogService',
     'HiFi.PositionalContent.UtilService',
-    function ($rootScope, $window, mediaResource, mediaHelper, editorService, util) {
+    function ($rootScope, $window, mediaResource, mediaHelper, dialogService, util) {
 
         return {
             element: function (state) {
@@ -55,24 +55,16 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
                 this.generateCropLink(breakpoint, state);
             },
             openMediaPicker: function (modelValue, state, isNew) {
-                var callback = function (editor) {
-                    this.setPrimaryImage(editor, modelValue, state, isNew);
+                var callback = function (image) {
+                    this.setPrimaryImage(image, modelValue, state, isNew);
                 }.bind(this);
-                editorService.mediaPicker({
-                    multiPicker: false,
-                    onlyImages: true,
-                    submit: callback,
-                    close: function () {
-                        editorService.close();
-                    }
-                });
+                dialogService.mediaPicker({ callback: callback });
             },
-            setPrimaryImage: function (editor, modelValue, state, isNew) {
-                var image = editor.selection[0];
+            setPrimaryImage: function (image, modelValue, state, isNew) {
                 mediaResource.getById(image.id).then(function (mediaItem) {
 
-                    var originalWidth = Number(_.find(mediaItem.tabs[0].properties, function (item) { return item.label === 'Width'; }).value);
-                    var originalHeight = Number(_.find(mediaItem.tabs[0].properties, function (item) { return item.label === 'Height'; }).value);
+                    var originalWidth = _.find(mediaItem.properties, function (item) { return item.label === 'Width'; }).value;
+                    var originalHeight = _.find(mediaItem.properties, function (item) { return item.label === 'Height'; }).value;
 
                     if (originalWidth >= state.minimumImageSize.width && originalHeight >= state.minimumImageSize.height) {
 
@@ -87,11 +79,9 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
                         modelValue.editorZoom = 70;
                         if (isNew)
                             $rootScope.$broadcast('HiFi.PositionalContent.PrimaryImageSet.' + state.id);
-
-                        editor.close();
                     }
                     else
-                        alert('Minimum image size not met, this image is ' + originalWidth + 'px * ' + originalHeight + 'px');
+                        alert('Minimum image size not met, this image is ' + image.originalWidth + 'px * ' + image.originalHeight + 'px');
 
                 });
             },
@@ -105,8 +95,8 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
                     return state.primaryImage.imageUrl;
             },
             edit: function (image, dataProperty, settingsProperty, state) {
-                editorService.open({
-                    view: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.breakpoint.html',
+                dialogService.open({
+                    template: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.breakpoint.html',
                     dialogData: {
                         title: 'Image content',
                         state: state,
@@ -114,13 +104,10 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
                         property: dataProperty,
                         settingsProperty: settingsProperty
                     },
-                    size: 'large',
-                    submit: function (data) {
+                    show: true,
+                    modalClass: 'positional-content-dialog-wrapper',
+                    callback: function (data) {
                         image = data.data;
-                        editorService.close();
-                    },
-                    close: function () {
-                        editorService.close();
                     }
                 });
             },
@@ -129,8 +116,8 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ImageService', [
                 state.breakpoints[b.name].cropLink = this.getForBreakpoint(b, state) + '?crop=' + b.left + ',' + b.top + ',' + b.right + ',' + b.bottom + '&cropmode=percentage&width=' + b.cropWidth + '&height=' + b.cropHeight + '&mode=crop';
             },
             getMinimumImageSize: function (config) {
-                var widthBreakpoint = _.max(config.breakpoints, function (item) { return Number(item.cropWidth) });
-                var heightBreakpoint = _.max(config.breakpoints, function (item) { return Number(item.cropHeight) });
+                var widthBreakpoint = _.max(config.breakpoints.items, function (item) { return Number(item.cropWidth) });
+                var heightBreakpoint = _.max(config.breakpoints.items, function (item) { return Number(item.cropHeight) });
 
                 return {
                     width: Number(widthBreakpoint.cropWidth) * config.imageSizeMultiplier,

@@ -1,25 +1,29 @@
-﻿<form val-form-manager>
-    <div ng-controller="HiFi.PositionalContent.Controller" class="positional-content">
+﻿<form ng-controller="HiFi.PositionalContent.Controller" class="positional-content" val-form-manager>
 
-        <positional-content-global-controls property="property" state="state" model-value="model.value" config="model.config"></positional-content-global-controls>
+    <positional-content-global-controls property="property" state="state" model-value="model.value" config="model.config"></positional-content-global-controls>
 
-        <positional-content-breakpoints property="property" state="state" model-value="model.value" config="model.config"></positional-content-breakpoints>
+    <positional-content-breakpoints property="property" state="state" model-value="model.value" config="model.config"></positional-content-breakpoints>
 
-        <div ng-if="!model.value.primaryImage">
+    <div ng-if="!model.value.primaryImage">
 
-            <ul class="unstyled list-icons">
-                <li>
-                    <i class="icon icon-add blue"></i>
-                    <a href ng-click="image.openMediaPicker(model.value, state, true)" prevent-default>
-                        Select Image
-                    </a>
-                </li>
-                <li>
-                    <small>
-                        Minimum dimensions is {{state.minimumImageSize.width}}px * {{state.minimumImageSize.height}}px
-                    </small>
-                </li>
-            </ul>
-        </div>
+        <ul class="unstyled list-icons">
+            <li>
+                <i class="icon icon-add blue"></i>
+                <a href ng-click="image.openMediaPicker(model.value, state, true)" prevent-default>
+                    Select Image
+                </a>
+            </li>
+            <li>
+                <small>
+                    Minimum dimensions is {{state.minimumImageSize.width}}px * {{state.minimumImageSize.height}}px
+                </small>
+            </li>
+        </ul>
     </div>
+
 </form>
+
+
+
+
+

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using System.Web.Mvc;
 
 namespace Hifi.PositionalContent
 {
@@ -32,14 +31,12 @@ namespace Hifi.PositionalContent
 
         protected virtual T Content<T>(Guid dtdGuid, PositionalContentDataTypes type)
         {
-            var contentService = DependencyResolver.Current.GetService<PositionalContentContentService>();
-            return contentService.Value<T>(dtdGuid, content, type);
+            return PositionalContentHelper.ContentValue<T>(dtdGuid, content, type);
         }
 
         protected virtual T Settings<T>(Guid dtdGuid, PositionalContentDataTypes type)
         {
-            var contentService = DependencyResolver.Current.GetService<PositionalContentContentService>();
-            return contentService.Value<T>(dtdGuid, settings, type);
+            return PositionalContentHelper.ContentValue<T>(dtdGuid, settings, type);
         }
     }
 

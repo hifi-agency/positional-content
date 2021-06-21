@@ -40,7 +40,7 @@ angular.module("umbraco").directive('positionalContentBreakpoints', [
                 return scope.breakpointsAsArray().length > 1;
             }
 
-            if (!scope.tabs && scope.state)
+            if (!scope.tabs)
             {
                 scope.onImageLoaded = function () {
                     element.find('.positional-content__image-loader').hide();

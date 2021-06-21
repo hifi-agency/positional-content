@@ -5,12 +5,12 @@
 
 angular.module("umbraco").controller("HiFi.PositionalContent.PropertyEditorInitialDimensions", [
     '$scope',
-    'editorService',
-    function ($scope, editorService) {
+    'dialogService',
+    function ($scope, dialogService) {
 
         $scope.openDimensionDialog = function () {
-            editorService.open({
-                view: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.dimension.html',
+            dialogService.open({
+                template: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.dimension.html',
                 dialogData: {
                     title: 'Initial item dimensions',
                     isItem: true,
@@ -25,7 +25,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyEditorIniti
                         }
                     }
                 },
-                size: 'small',
+                show: true,
                 modalClass: 'positional-content-dialog-wrapper',
                 callback: function (data) {
                     $scope.mode.value = data.data.dimensions.intial;

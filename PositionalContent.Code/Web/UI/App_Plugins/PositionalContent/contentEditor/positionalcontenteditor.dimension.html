@@ -1,163 +1,250 @@
-﻿<div class="position-content-editor" ng-controller="HiFi.PositionalContentDialogController as vm">
-    <form val-form-manager>
+﻿<form class="umb-panel position-content-editor" ng-controller="HiFi.PositionalContentDialogController" val-form-manager>
 
-        <umb-editor-view>
-
-            <umb-editor-header name="title"
-                               name-locked="true"
-                               hide-alias="true"
-                               hide-icon="true"
-                               hide-description="true">
-            </umb-editor-header>
-
-            <umb-editor-container>
-
-                <umb-tabs-nav tabs="tabs" on-tab-change="changeTab(tab)"></umb-tabs-nav>
-
-                <div class="umb-pane" ng-if="selectedTab.alias == 'content'">
-
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Overridden" ng-if="content.value != undefined" class="form-horizontal">
-                                <umb-toggle checked="dimension.overrideContent" on-click="toggle(dimension, 'overrideContent')"></umb-toggle>
-                            </umb-control-group>
-
-                            <div ng-if="!dimension.overrideContent">
-                                <positional-content-settings settings="content"></positional-content-settings>
-                            </div>
-
-                            <div ng-if="dimension.overrideContent">
-                                <positional-content-settings settings="dimensionContent"></positional-content-settings>
-                            </div>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                </div>
-
-                <div class="umb-pane" ng-if="selectedTab.alias == 'settings'">
-
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Overridden" ng-if="settings.value != undefined" class="form-horizontal">
-                                <umb-toggle checked="dimension.overrideSettings" on-click="toggle(dimension, 'overrideSettings')"></umb-toggle>
-                            </umb-control-group>
-
-                            <div ng-if="!dimension.overrideSettings">
-                                <positional-content-settings settings="settings"></positional-content-settings>
-                            </div>
-
-                            <div ng-if="dimension.overrideSettings">
-                                <positional-content-settings settings="dimensionSettings"></positional-content-settings>
-                            </div>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                </div>
-
-                <div class="umb-pane form-horizontal" ng-if="selectedTab.alias == 'dimensions'">
-
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Hide">
-                                <umb-toggle checked="dimension.hide" on-click="toggle(dimension, 'hide')"></umb-toggle>
-                            </umb-control-group>
-
-                            <umb-control-group label="Top">
-                                <input type="text" name="textbox" ng-model="dimension.top" ng-change="updateDimensions(dimension, 'top')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Left">
-                                <input type="text" name="textbox" ng-model="dimension.left" ng-change="updateDimensions(dimension, 'left')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Right">
-                                <input type="text" name="textbox" ng-model="dimension.right" ng-change="updateDimensions(dimension, 'right')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Bottom">
-                                <input type="text" name="textbox" ng-model="dimension.bottom" ng-change="updateDimensions(dimension, 'bottom')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                    <umb-box>
-                        <umb-box-header title='Width' description='static or responsive'></umb-box-header>
-                        <umb-box-content>
-
-                            <umb-control-group label="Is Static">
-                                <umb-toggle checked="dimension.widthAuto" on-click="toggle(dimension, 'widthAuto')"></umb-toggle>
-                            </umb-control-group>
-
-                            <umb-control-group label="Width" ng-if="!dimension.widthAuto">
-                                <input type="text" name="textbox" ng-model="dimension.width" ng-change="updateWidth(dimension, '{{dimension.width}}')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                    <umb-box>
-                        <umb-box-header title='Height' description='static or responsive'></umb-box-header>
-                        <umb-box-content>
-
-                            <umb-control-group label="Is Static">
-                                <umb-toggle checked="dimension.heightAuto" on-click="toggle(dimension, 'heightAuto')"></umb-toggle>
-                            </umb-control-group>
-
-                            <umb-control-group label="Height" ng-if="!dimension.heightAuto">
-                                <input type="text" name="textbox" ng-model="dimension.height" ng-change="updateWidth(dimension, '{{dimension.height}}')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                    <umb-box>
-                        <umb-box-header title='Responsive origin' description='grow from which corner'></umb-box-header>
-                        <umb-box-content>
-
-                            <umb-control-group label="From Right">
-                                <umb-toggle checked="dimension.pinToRight" on-click="toggle(dimension, 'pinToRight')"></umb-toggle>
-                            </umb-control-group>
-
-                            <umb-control-group label="From Bottom">
-                                <umb-toggle checked="dimension.pinToBottom" on-click="toggle(dimension, 'pinToBottom')"></umb-toggle>
-                            </umb-control-group>
-
-                            <h5 ng-if="dimension.height == undefined">
-                                Height not set, manual setting of top and bottom not available
-                                <span style="display: block; font-size: 11px;">to set the height move the content in the editor</span>
-                            </h5>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                </div>
+    <umb-header tabs="tabs">
+        <h1 class="headline" ng-bind-html="title"></h1>
+    </umb-header>
 
 
-            </umb-editor-container>
+    <div class="umb-panel-body with-footer no-header" auto-scale="90">
+        <umb-tab-view>
 
-            <umb-editor-footer>
-                <umb-editor-footer-content-right>
-                    <div class="umb-el-wrap umb-panel-buttons">
-                        <umb-button type="button"
-                                    button-style="link"
-                                    label-key="general_close"
-                                    shortcut="esc"
-                                    action="close()">
-                        </umb-button>
-                        <umb-button type="button"
-                                    button-style="success"
-                                    label-key="general_submit"
-                                    action="save()">
-                        </umb-button>
+            <umb-tab id="tab1" rel="svensson">
+
+                <div class="umb-pane">
+
+                    <div class="text-right" label="Overridden" description="" ng-if="content.value != undefined">
+                        <label style="float: right; padding-left: 10px" for="overrideContent">
+                            Overridden
+                        </label>
+                        <div class="controls controls-row">
+                            <input type="checkbox" id="overrideContent" ng-model="dimension.overrideContent" />
+                        </div>
                     </div>
-                </umb-editor-footer-content-right>
-            </umb-editor-footer>
-        </umb-editor-view>
-    </form>
-</div>
+
+                    <div ng-if="!dimension.overrideContent">
+                        <positional-content-settings settings="content"></positional-content-settings>
+                    </div>
+
+                    <div ng-if="dimension.overrideContent">
+                        <positional-content-settings settings="dimensionContent"></positional-content-settings>
+                    </div>
+
+                </div>
+
+            </umb-tab>
+
+            <umb-tab id="tab2" rel="svensson">
+
+                <div class="umb-pane">
+
+                    <div class="text-right" label="Overridden" description="" ng-if="settings.value != undefined">
+                        <label style="float: right; padding-left: 10px" for="overrideSettings">
+                            Overridden
+                        </label>
+
+                        <div class="controls controls-row">
+                            <input type="checkbox" id="overrideSettings" ng-model="dimension.overrideSettings" />
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div ng-if="!dimension.overrideSettings">
+                        <positional-content-settings settings="settings"></positional-content-settings>
+                    </div>
+
+                    <div ng-if="dimension.overrideSettings">
+                        <positional-content-settings settings="dimensionSettings"></positional-content-settings>
+                    </div>
+
+                </div>
+
+            </umb-tab>
+
+            <umb-tab id="tab3" rel="svensson">
+
+                <div class="umb-pane">
+
+                    <div class="umb-property ng-scope" label="Hide" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Hide
+                                </label>
+
+                                <div class="controls controls-row">
+                                    <input type="checkbox" name="textbox" ng-model="dimension.hide" id="title">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Url" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Top
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.top" ng-change="updateDimensions(dimension, 'top')" id="title" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Left" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Left
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.left" id="title" ng-change="updateDimensions(dimension, 'left')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Right" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Right
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.right" id="title" ng-change="updateDimensions(dimension, 'right')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Bottom" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Bottom
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.bottom" id="title" ng-change="updateDimensions(dimension, 'bottom')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Width" description="">
+                        <div class="control-group umb-control-group">
+                            <div>
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Width
+                                </label>
+                                <div class="controls controls-row"></div>
+                            </div>
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" style="font-weight: normal" for="">
+                                    - Fits Content
+                                </label>
+
+                                <div class="controls controls-row">
+                                    <input type="checkbox" name="textbox" ng-model="dimension.widthAuto" id="title">
+                                </div>
+                            </div>
+                            <div class="umb-el-wrap" ng-if="!dimension.widthAuto">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" style="font-weight: normal" for="">
+                                    - Value
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.width" id="title" ng-change="updateWidth(dimension, '{{dimension.width}}')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="Width" description="">
+                        <div class="control-group umb-control-group">
+                            <div>
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Height
+                                </label>
+                                <div class="controls controls-row"></div>
+                            </div>
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" style="font-weight: normal" for="">
+                                    - Fits Content
+                                </label>
+
+                                <div class="controls controls-row">
+                                    <input type="checkbox" name="textbox" ng-model="dimension.heightAuto" id="title">
+                                </div>
+                            </div>
+                            <div class="umb-el-wrap" ng-if="!dimension.heightAuto">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" style="font-weight: normal" for="">
+                                   - Value
+                                </label>
+
+                                <div class="controls controls-row positional-editor">
+                                    <input type="text" name="textbox" ng-model="dimension.height" id="title" ng-change="updateHeight(dimension, '{{dimension.hidth}}')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="PinToRight" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Pin To Right
+                                </label>
+
+                                <div class="controls controls-row">
+                                    <input type="checkbox" name="textbox" ng-model="dimension.pinToRight" id="title">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property ng-scope" label="PinToBottom" description="">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                    Pin To Bottom
+                                </label>
+
+                                <div class="controls controls-row">
+                                    <input type="checkbox" name="textbox" ng-model="dimension.pinToBottom" id="title">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h5 ng-if="dimension.height == undefined">
+                        Height not set, manual setting of top and bottom not available
+                        <span style="display: block; font-size: 11px;">to set the height move the content in the editor</span>
+                    </h5>
+
+                </div>
+
+            </umb-tab>
+
+        </umb-tab-view>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <a ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+                <a ng-click="save()" class="btn btn-primary">
+                    <localize key="actions_update">Update</localize>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>

@@ -1,0 +1,17 @@
+# version format
+version: 1.0.11.{build}
+
+# UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
+# example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
+init:
+  - set UMBRACO_PACKAGE_PRERELEASE_SUFFIX=rtm 
+  - set APPVEYOR_REPO_TAG=true
+
+# to disable automatic builds
+build_script:
+  - cd BuildPackage
+  - Build.bat
+
+artifacts:
+  - path: BuildPackage\artifacts\*.nupkg
+  - path: BuildPackage\artifacts\*.zip

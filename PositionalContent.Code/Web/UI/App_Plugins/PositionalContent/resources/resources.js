@@ -30,12 +30,19 @@ angular.module('umbraco.resources').factory('HiFi.PositionalContent.Resources',
                 var url = "/umbraco/backoffice/positionalcontent/positionalcontentpreview/GetPartialViewResultAsHtmlForEditor";
                 var resultParameters = { item: angular.toJson(item, false), breakpointName: breakpointName, previewModifierClass: previewModifierClass, dtdGuid: dtdGuid, view: view, id: $routeParams.id, doctype: $routeParams.doctype };
 
-                return $http.post(url, resultParameters, {
+                var promise = $http.post(url, resultParameters, {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
                     transformRequest: function (result) {
                         return $.param(result);
                     }
+                })
+                .success(function (htmlResult) {
+                    if (htmlResult.trim().length > 0) {
+                        return htmlResult;
+                    }
                 });
+
+                return promise;
             }
         };
     }

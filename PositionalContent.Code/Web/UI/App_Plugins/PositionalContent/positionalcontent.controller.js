@@ -11,7 +11,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
     '$q',
     '$timeout',
     '$element',
-    'editorService',
+    'dialogService',
     'umbPropEditorHelper',
     'appState',
     'editorState',
@@ -21,7 +21,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
     'HiFi.PositionalContent.BreakpointService',
     'HiFi.PositionalContent.ImageService',
     'HiFi.PositionalContent.ScaleService',
-    function ($scope, $rootScope, $q, $timeout, $element, editorService, umbPropEditorHelper, appState, editorState, resources, cropperService, itemService, breakpointService, imageService, scaleService) {
+    function ($scope, $rootScope, $q, $timeout, $element, dialogService, umbPropEditorHelper, appState, editorState, resources, cropperService, itemService, breakpointService, imageService, scaleService) {
 
         if (!$scope.model.value)
             $scope.model.value = {};
@@ -97,7 +97,7 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
 
         resources.getDataTypeByAlias(currentSection, nodeContext.contentTypeAlias, propAlias)
             .then(function (dataType2) {
-                if (dataType2 && dataType2.guid)
+                if (dataType2.guid)
                     $scope.model.value.dtdGuid = dataType2.guid;
             })
             .then(function () {

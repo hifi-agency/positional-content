@@ -1,117 +1,160 @@
-﻿<div class="position-content-editor" ng-controller="HiFi.PositionalContentDialogController as vm">
+﻿<form class="umb-panel position-content-editor" ng-controller="HiFi.PositionalContentDialogController" val-form-manager>
 
-    <form val-form-manager>
+        <umb-header tabs="tabs">
+            <h1 class="headline" ng-bind-html="title"></h1>
+        </umb-header>
 
-        <umb-editor-view>
 
-            <umb-editor-header name="title"
-                               name-locked="true"
-                               hide-alias="true"
-                               hide-icon="true"
-                               hide-description="true">
-            </umb-editor-header>
+        <div class="umb-panel-body with-footer no-header" auto-scale="90">
+            <umb-tab-view>
 
-            <umb-editor-container>
+                <umb-tab id="tab1" rel="svensson">
 
-                <umb-tabs-nav tabs="tabs" on-tab-change="changeTab(tab)"></umb-tabs-nav>
+                    <div class="umb-pane">
 
-                <div class="umb-pane" ng-if="selectedTab.alias == 'content'">
-
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Overridden" ng-if="content.value != undefined" class="form-horizontal">
-                                <umb-toggle checked="dimension.overrideContent" on-click="toggle(dimension, 'overrideContent')"></umb-toggle>
-                            </umb-control-group>
-
-                            <div ng-if="!breakpoint.overrideContent">
-                                <positional-content-settings settings="content"></positional-content-settings>
+                        <div class="text-right" label="Overridden" description="" ng-if="content.value != undefined">
+                            <label style="float: right; padding-left: 10px" for="overrideContent">
+                                Overridden
+                            </label>
+                            <div class="controls controls-row">
+                                <input type="checkbox" id="overrideContent" ng-model="breakpoint.overrideContent" />
                             </div>
+                        </div>
 
-                            <div ng-if="breakpoint.overrideContent">
-                                <positional-content-settings settings="breakpointContent"></positional-content-settings>
+                        <div ng-if="!breakpoint.overrideContent">
+                            <positional-content-settings settings="content"></positional-content-settings>
+                        </div>
+
+                        <div ng-if="breakpoint.overrideContent">
+                            <positional-content-settings settings="breakpointContent"></positional-content-settings>
+                        </div>
+
+                    </div> 
+
+                </umb-tab>
+
+                <umb-tab id="tab2" rel="svensson">
+
+                    <div class="umb-pane">
+
+                        <div class="text-right" label="Overridden" description="" ng-if="settings.content != undefined">
+                            <label style="float: right; padding-left: 10px" for="overrideSettings">
+                                Overridden
+                            </label>
+
+                            <div class="controls controls-row">
+                                <input type="checkbox" id="overrideSettings" ng-model="breakpoint.overrideSettings" />
                             </div>
+                        </div>
 
-                        </umb-box-content>
-                    </umb-box>
+                        <hr />
 
-                </div>
+                        <div ng-if="!breakpoint.overrideSettings">
+                            <positional-content-settings settings="settings"></positional-content-settings>
+                        </div>
 
-                <div class="umb-pane" ng-if="selectedTab.alias == 'settings'">
+                        <div ng-if="breakpoint.overrideSettings">
+                            <positional-content-settings settings="breakpointSettings"></positional-content-settings>
+                        </div>
 
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Overridden" ng-if="settings.value != undefined" class="form-horizontal">
-                                <umb-toggle checked="dimension.overrideSettings" on-click="toggle(dimension, 'overrideSettings')"></umb-toggle>
-                            </umb-control-group>
-
-                            <hr />
-
-                            <div ng-if="!breakpoint.overrideSettings">
-                                <positional-content-settings settings="settings"></positional-content-settings>
-                            </div>
-
-                            <div ng-if="breakpoint.overrideSettings">
-                                <positional-content-settings settings="breakpointSettings"></positional-content-settings>
-                            </div>
-
-                        </umb-box-content>
-                    </umb-box>
-
-                </div>
-
-                <div class="umb-pane form-horizontal" ng-if="selectedTab.alias == 'dimensions'">
-
-                    <umb-box>
-                        <umb-box-content>
-
-                            <umb-control-group label="Top">
-                                <input type="text" name="textbox" ng-model="breakpoint.top" ng-change="updateDimensions(breakpoint, 'top')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Left">
-                                <input type="text" name="textbox" ng-model="breakpoint.left" ng-change="updateDimensions(breakpoint, 'left')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Right">
-                                <input type="text" name="textbox" ng-model="breakpoint.right" ng-change="updateDimensions(breakpoint, 'right')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Bottom">
-                                <input type="text" name="textbox" ng-model="breakpoint.bottom" ng-change="updateDimensions(breakpoint, 'bottom')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>%</span>
-                            </umb-control-group>
-
-                            <umb-control-group label="Scale">
-                                <input type="text" name="textbox" ng-model="breakpoint.scale" ng-change="updateDimensions(breakpoint, '{{breakpoint.scale}}')" id="title" class="umb-textstring textstring input-block-level" select-on-click autocomplete=off><span>x</span>
-                            </umb-control-group>
-
-
-                        </umb-box-content>
-                    </umb-box>
-
-                </div>
-
-            </umb-editor-container>
-
-            <umb-editor-footer>
-                <umb-editor-footer-content-right>
-                    <div class="umb-el-wrap umb-panel-buttons">
-                        <umb-button type="button"
-                                    button-style="link"
-                                    label-key="general_close"
-                                    shortcut="esc"
-                                    action="close()">
-                        </umb-button>
-                        <umb-button type="button"
-                                    button-style="success"
-                                    label-key="general_submit"
-                                    action="save()">
-                        </umb-button>
                     </div>
-                </umb-editor-footer-content-right>
-            </umb-editor-footer>
 
-        </umb-editor-view>
-    </form>
-</div>
+                </umb-tab>
+
+                <umb-tab id="tab3" rel="svensson">
+
+                    <div class="umb-pane">
+
+                        <div class="umb-property ng-scope" label="Url" description="">
+                            <div class="control-group umb-control-group">
+                                <div class="umb-el-wrap">
+                                    <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                        Top
+                                    </label>
+
+                                    <div class="controls controls-row positional-editor">
+                                        <input type="text" name="textbox" ng-model="breakpoint.top" id="title" ng-change="updateDimensions(breakpoint, 'top')" class="umb-editor umb-textstring textstring " select-on-click autocomplete=off><span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="umb-property ng-scope" label="Left" description="">
+                            <div class="control-group umb-control-group">
+                                <div class="umb-el-wrap">
+                                    <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                        Left
+                                    </label>
+
+                                    <div class="controls controls-row positional-editor">
+                                        <input type="text" name="textbox" ng-model="breakpoint.left" id="title" ng-change="updateDimensions(breakpoint, 'left')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="umb-property ng-scope" label="Right" description="">
+                            <div class="control-group umb-control-group">
+                                <div class="umb-el-wrap">
+                                    <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                        Right
+                                    </label>
+
+                                    <div class="controls controls-row positional-editor">
+                                        <input type="text" name="textbox" ng-model="breakpoint.right" id="title" ng-change="updateDimensions(breakpoint, 'right')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="umb-property ng-scope" label="Bottom" description="">
+                            <div class="control-group umb-control-group">
+                                <div class="umb-el-wrap">
+                                    <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                        Bottom
+                                    </label>
+
+                                    <div class="controls controls-row positional-editor">
+                                        <input type="text" name="textbox" ng-model="breakpoint.bottom" id="title" ng-change="updateDimensions(breakpoint, 'bottom')" class="umb-editor umb-textstring textstring" select-on-click autocomplete=off><span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="umb-property ng-scope" label="Scale" description="">
+                            <div class="control-group umb-control-group">
+                                <div class="umb-el-wrap">
+                                    <label ng-if="hideLabel!=='true'" class="control-label ng-scope ng-binding" for="">
+                                        Scale
+                                    </label>
+
+                                    <div class="controls controls-row positional-editor">
+                                        <input type="text" name="textbox" ng-model="breakpoint.scale" id="title" class="umb-editor umb-textstring textstring small" ng-change="cropper.validateScaleChange(state, breakpoint, '{{breakpoint.scale}}')" select-on-click autocomplete=off><span>x</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+
+                </umb-tab>
+
+            </umb-tab-view>
+
+        </div>
+
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+                    <a ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+                    <a ng-click="save()" class="btn btn-primary">
+                        <localize key="actions_update">Update</localize>
+                    </a>
+                </div>
+            </div>
+        </div>
+</form>

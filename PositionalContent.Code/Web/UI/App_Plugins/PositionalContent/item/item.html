@@ -8,7 +8,7 @@
             {{i.id}}
         </span>
         <div class="positional-content__item-preview {{dimension(i).hide ? 'positional-content__item-preview-hide' : ''}}" ng-if="i.content && i.content != ''">
-            <div class="positional-content__item-preview-wrapper" ng-bind-html="item.trustedHtml(i.preview)"></div>
+            <div class="positional-content__item-preview-wrapper" ng-if="i.preview" ng-bind-html-unsafe="i.preview"></div>
         </div>
         <span class="positional-content__item-id" style="transform:scale({{scale.inverse(state)}});" ng-if="i.content && i.content != ''">
             {{i.id}}

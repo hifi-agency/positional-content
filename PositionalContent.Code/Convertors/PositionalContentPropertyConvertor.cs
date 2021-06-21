@@ -9,28 +9,26 @@ using Newtonsoft.Json;
 
 namespace Hifi.PositionalContent
 {
-    public class PositionalContentPropertyConvertor : PropertyValueConverterBase, IPropertyValueConverter
+    [PropertyValueType(typeof(PositionalContentModel))]
+    [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
+    public class PositionalContentPropertyConvertor : PropertyValueConverterBase
     {
-        public override bool IsConverter(IPublishedPropertyType propertyType)
-            => propertyType.EditorAlias == "HiFi.PositionalContent";
-
-        public override Type GetPropertyValueType(IPublishedPropertyType propertyType)
-            => typeof(PositionalContentModel);
-
-        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType)
-            => PropertyCacheLevel.Snapshot;
-
-        public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source, bool preview)
+        public override object ConvertDataToSource(PublishedPropertyType propertyType, object source, bool preview)
         {
-            if (source != null)
+            if(source != null)
             {
                 try
                 {
                     return JsonConvert.DeserializeObject<PositionalContentModel>(source.ToString());
                 }
-                catch { }
+                catch { }  
             }
             return source;
+        }
+
+        public override bool IsConverter(PublishedPropertyType propertyType)
+        {
+            return propertyType.PropertyEditorAlias.Equals("HiFi.PositionalContent");
         }
     }
 }

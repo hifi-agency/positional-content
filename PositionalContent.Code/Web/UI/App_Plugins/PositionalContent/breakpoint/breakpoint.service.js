@@ -8,11 +8,11 @@ angular.module('umbraco').factory('HiFi.PositionalContent.BreakpointService', [
     '$window',
     'mediaResource',
     'mediaHelper',
-    'editorService',
+    'dialogService',
     'HiFi.PositionalContent.ImageService',
     'HiFi.PositionalContent.UtilService',
     'HiFi.PositionalContent.PremiumServices',
-    function ($rootScope, $window, mediaResource, mediaHelper, editorService, imageService, util, premium) {
+    function ($rootScope, $window, mediaResource, mediaHelper, dialogService, imageService, util, premium) {
 
         return {
             element: function (state) {
@@ -34,7 +34,7 @@ angular.module('umbraco').factory('HiFi.PositionalContent.BreakpointService', [
                 }
                 else if (!_.isEmpty(value.breakpoints)) {
                     var key = Object.keys(value.breakpoints)[0];
-                    angular.forEach(config.breakpoints, function (item) {
+                    angular.forEach(config.breakpoints.items, function (item) {
                         value.breakpoints[item.name].cropWidth = item.cropWidth;
                         value.breakpoints[item.name].cropHeight = item.cropHeight;
                         value.breakpoints[item.name].breakpointUpper = item.breakpointUpper; 
@@ -47,7 +47,7 @@ angular.module('umbraco').factory('HiFi.PositionalContent.BreakpointService', [
             },
             setupBreakpointsFromConfig: function (value, config, state) {
 
-                angular.forEach(config.breakpoints, function (item, index) {
+                angular.forEach(config.breakpoints.items, function (item, index) {
                     var breakpoint = {
                         name: item.name,
                         cropWidth: item.cropWidth,
@@ -97,24 +97,16 @@ angular.module('umbraco').factory('HiFi.PositionalContent.BreakpointService', [
                 });
             },
             openMediaPicker: function (breakpoint, modelValue, state) {
-                var callback = function (editor) {
-                    this.setOverrideImage(editor, breakpoint, modelValue, state);
+                var callback = function (image) {
+                    this.setOverrideImage(image, breakpoint, modelValue, state);
                 }.bind(this);
-                editorService.mediaPicker({
-                    multiPicker: false,
-                    onlyImages: true,
-                    submit: callback,
-                    close: function () {
-                        editorService.close();
-                    }
-                });
+                dialogService.mediaPicker({ callback: callback });
             },
-            setOverrideImage: function (editor, breakpoint, modelValue, state) {
-                var image = editor.selection[0];
+            setOverrideImage: function (image, breakpoint, modelValue, state) {
                 mediaResource.getById(image.id).then(function (mediaItem) {
 
-                    var originalWidth = Number(_.find(mediaItem.tabs[0].properties, function (item) { return item.label === 'Width'; }).value);
-                    var originalHeight = Number(_.find(mediaItem.tabs[0].properties, function (item) { return item.label === 'Height'; }).value);
+                    var originalWidth = _.find(mediaItem.properties, function (item) { return item.label === 'Width'; }).value;
+                    var originalHeight = _.find(mediaItem.properties, function (item) { return item.label === 'Height'; }).value;
 
                     if (originalWidth >= state.minimumImageSize.width && originalHeight >= state.minimumImageSize.height) {
                         state.breakpoints[breakpoint.name].imageUrl = image.image;
@@ -123,7 +115,6 @@ angular.module('umbraco').factory('HiFi.PositionalContent.BreakpointService', [
                         if (premium.isPremium()) {
                             premium.breakpointService.calcZoomPercentages(modelValue, state);
                         }
-                        editorService.close();
                     }
                     else
                         alert('Minimum image size not met, this image is ' + image.originalWidth + 'px * ' + image.originalHeight + 'px');

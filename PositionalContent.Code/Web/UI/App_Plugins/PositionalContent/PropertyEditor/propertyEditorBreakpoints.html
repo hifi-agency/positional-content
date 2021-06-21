@@ -13,13 +13,13 @@
             </tr>
         </thead>
         <tbody ui-sortable="sortableOptions">
-            <tr ng-repeat="item in model.value">
+            <tr ng-repeat="item in model.value.items">
                 <td class="icon icon-navigation"></td>
                 <td><input type="text" ng-model="item.name" required /></td>
-                <td><input class="umb-property-editor-small" type="number" pattern="[0-9]*" ng-model="item.cropWidth" fix-number required /></td>
-                <td><input class="umb-property-editor-small" type="number" pattern="[0-9]*" ng-model="item.cropHeight" fix-number required /></td>
-                <td><input class="umb-property-editor-small" type="number" pattern="[0-9]*" ng-model="item.breakpointUpper" fix-number /></td>
-                <td><input class="umb-property-editor-small" type="number" pattern="[0-9]*" ng-model="item.breakpointLower" fix-number /></td>
+                <td><input class="form-control input-sm" type="number" pattern="[0-9]*" ng-model="item.cropWidth" fix-number required /></td>
+                <td><input type="number" pattern="[0-9]*" ng-model="item.cropHeight" fix-number required /></td>
+                <td><input type="number" pattern="[0-9]*" ng-model="item.breakpointUpper" fix-number /></td>
+                <td><input type="number" pattern="[0-9]*" ng-model="item.breakpointLower" fix-number /></td>
                 <td><button class="btn" ng-click="remove($index)">Remove</button></td>
             </tr>
         </tbody>

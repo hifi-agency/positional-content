@@ -1,7 +1,7 @@
 ﻿<div ng-controller="HiFi.PositionalContent.PropertyEditorPicker">
 
     <select name="dropDownList"
-            class="umb-dropdown"
+            class="umb-editor umb-dropdown"
             ng-model="model.value"
             ng-options="i.name for i in model.dataTypes track by i.guid">
         <option value="" ng-if="false"></option>

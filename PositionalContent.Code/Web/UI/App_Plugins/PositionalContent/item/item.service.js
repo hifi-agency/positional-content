@@ -4,18 +4,21 @@
  */
 
 angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
+    '$rootScope',
+    '$q',
+    '$http',
     '$timeout',
-    '$sce',
-    'editorService',
+    'dialogService',
     'HiFi.PositionalContent.UtilService',
+    'HiFi.PositionalContent.CropperService',
     'HiFi.PositionalContent.ScaleService',
     'HiFi.PositionalContent.Resources',
-    function ($timeout, $sce, editorService, util, scaleService, resources) {
+    function ($rootScope, $q, $http, $timeout, dialogService, util, cropperService, scaleService, resources) {
 
         return {
             nextId: function (value, state) {
                 if (value.items && value.items.length > 0) {
-                    var maxIdItem = _.max(value.items, function (o) { return o.id });
+                    var maxIdItem = _.max(value.items, function (o) { return o.id })
                     return Number(maxIdItem.id) + 1;
                 }
                 else
@@ -26,7 +29,7 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
                     value.items = [];
                 }
                 var breakpointDimensions = {};
-                angular.forEach(config.breakpoints, function (breakpoint) {                  
+                angular.forEach(config.breakpoints.items, function (breakpoint) {                  
                     breakpointDimensions[breakpoint.name] = angular.copy(config.initialItemDimensions);
                 });
                 value.items.push({
@@ -35,8 +38,8 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
                 });
             },
             edit: function (item, dataProperty, settingsProperty, state, modelValue) {
-                editorService.open({
-                    view: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.dimension.html',
+                dialogService.open({
+                    template: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.dimension.html',
                     dialogData: {
                         title: 'Item ' + item.id + ' content',
                         isItem: true,
@@ -46,13 +49,10 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
                         property: dataProperty,
                         settingsProperty: settingsProperty
                     },
-                    size: 'large',
-                    submit: function (data) {
+                    show: true,
+                    modalClass: 'positional-content-dialog-wrapper',
+                    callback: function (data) {
                         item = data.data;
-                        editorService.close();
-                    },
-                    close: function () {
-                        editorService.close();
                     }
                 });
             },
@@ -72,10 +72,8 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
 
                     angular.forEach(modelValue.items, function (i) {
                         $timeout(function () { if (!i.preview) { i.preview = "<div class='item-preview-loading'>Loading...</div>"; } }, 1000);
-                        resources.getPartialViewResultAsHtmlForEditor(modelValue.dtdGuid, i, state.active.name, state.previewModifierClass).then(function (response) {
-                            if (response.data.trim().length > 0) {
-                                i.preview = response.data;
-                            }
+                        resources.getPartialViewResultAsHtmlForEditor(modelValue.dtdGuid, i, state.active.name, state.previewModifierClass).success(function (htmlResult) {
+                            i.preview = htmlResult;
                         });
                     });
 
@@ -162,9 +160,6 @@ angular.module('umbraco').factory('HiFi.PositionalContent.ItemService', [
                 dimension.top = value;
                 dimension.bottom = value;
 
-            },
-            trustedHtml: function (plainText) {
-                return $sce.trustAsHtml(plainText);
             }
         };
     }]);

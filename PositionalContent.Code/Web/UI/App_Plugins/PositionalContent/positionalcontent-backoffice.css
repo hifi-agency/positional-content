@@ -466,33 +466,27 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.19), 0 0 6px rgba(0,0,0,0.23)
 }
 
-.position-content-editor .umb-tab--active {
-    //font-weight: bold;
-}
-
 .positional-content__item-preview-hide {
     opacity: 0.1;
 }
 
-.position-content-editor .form-horizontal label {
-    width: 100px;
+.position-content-editor .positional-editor input {
+    min-width: 15%;
+    text-align: right;
+    width: 130px;
 }
 
-.position-content-editor .form-horizontal .controls-row {
-    margin-left: 120px;
+.position-content-editor .positional-editor input.small {
+    min-width: 5%;
+    width: 46px;
 }
 
-.position-content-editor .form-horizontal .controls-row input {
-    width: calc(100% - 23px);
-}
-
-.position-content-editor .form-horizontal .controls-row span {
+.position-content-editor .positional-editor span {
     background: rgb(204, 204, 204);
     color: rgb(50, 50, 50);
     display: inline-block;
     font-weight: bold;
     height: 32px;
-    width: 15px;
     line-height: 35px;
     padding: 0 4px;
 }

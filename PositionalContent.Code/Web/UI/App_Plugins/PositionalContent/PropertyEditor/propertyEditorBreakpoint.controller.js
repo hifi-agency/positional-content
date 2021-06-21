@@ -8,20 +8,20 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyBreakpoints
     function ($scope) {
 
         $scope.add = function () {
-            $scope.model.value.push({
+            $scope.model.value.items.push({
                 name: "",
                 cropWidth: "",
                 cropHeight: "",
                 breakpointUpper: "",
-                breakpointLower: ""
+                breakpointLower: "",
             });
-        };
+        }
 
         $scope.remove = function (index) {
             if (window.confirm("Are you sure?")) {
-                $scope.model.value.splice(index, 1);
+                $scope.model.value.items.splice(index, 1);
             }
-        };
+        }
 
         $scope.sortableOptions = {
             axis: 'y',
@@ -29,11 +29,11 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyBreakpoints
             handle: ".icon-navigation"
         };
 
-        //if (!$scope.model.value)
-        //    $scope.model.value = {};
+        if (!$scope.model.value)
+            $scope.model.value = {};
 
-        if (!$scope.model.value) {
-            $scope.model.value = [];
+        if (!$scope.model.value.items) {
+            $scope.model.value.items = [];
             $scope.add();
         }
 

@@ -7,7 +7,6 @@ using Umbraco.Web;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using System.Globalization;
-using Umbraco.Web.Composing;
 
 namespace Hifi.PositionalContent
 {
@@ -69,7 +68,9 @@ namespace Hifi.PositionalContent
                     if (image != null)
                         imageId = image.ImageId;
                 }
-                return Current.UmbracoHelper.Media(imageId);
+
+                var umbraco = new UmbracoHelper(UmbracoContext.Current);
+                return umbraco.TypedMedia(imageId);
             }
             return null;
         }
@@ -152,11 +153,11 @@ namespace Hifi.PositionalContent
 
     internal static class PositionalContentExtensionHelperInternal
     {
-        public static E ToModel<E>(this IPublishedElement content)
-            where E : PublishedElementModel
+        public static E ToModel<E>(this IPublishedContent content)
+            where E : PublishedContentModel
         {
             var type = typeof(E);
-            if (content != null && content.ContentType.Alias.ToLower() == type.Name.ToLower())
+            if (content != null && content.DocumentTypeAlias.ToLower() == type.Name.ToLower())
                 return Activator.CreateInstance(typeof(E), new object[] { content }) as E;
             else
                 return null;

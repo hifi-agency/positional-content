@@ -1,25 +1,23 @@
 ﻿using Umbraco.Core;
 using Umbraco.Core.Services;
-using Umbraco.Core.Services.Implement;
-using Umbraco.Core.Cache;
-using Umbraco.Web.Composing;
+
 
 namespace Hifi.PositionalContent
 {
-    public class PositionalContentCacheExpire : Umbraco.Core.Composing.IComponent
+    public class PositionalContentCacheExpire : ApplicationEventHandler
     {
-        public void Initialize()
+        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            DataTypeService.Saved += (ds, e) =>
-            {
-                foreach(var dataType in e.SavedEntities)
-                {
-                    Current.AppCaches.RuntimeCache.ClearByKey(Constants.CacheKey_GetTargetDataTypeDefinition + dataType.Id);
-                }
-            };
+            DataTypeService.Saved += ExpirePositionalContentCache;
         }
 
-        public void Terminate()
-        { }
+        private void ExpirePositionalContentCache(IDataTypeService sender, global::Umbraco.Core.Events.SaveEventArgs<global::Umbraco.Core.Models.IDataTypeDefinition> e)
+        {
+            foreach (var dataType in e.SavedEntities)
+            {
+                ApplicationContext.Current.ApplicationCache.RuntimeCache.ClearCacheItem(
+                    Constants.CacheKey_GetTargetDataTypeDefinition + dataType.Id);
+            }
+        }
     }
 }

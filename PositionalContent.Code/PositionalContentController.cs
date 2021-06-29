@@ -21,13 +21,13 @@ namespace Hifi.PositionalContent
         public ActionResult RenderItem(PositionalContentModel data, PositionalContentItem item)
         {
             var model = new PositionalContentItemViewModel() { Content = item.GetContents(data), Settings = item.GetSettings(data) };
-            return View("/views/Partials/PositionalContent/Base.cshtml", model);
+            return PartialView("/views/Partials/PositionalContent/Base.cshtml", model);
         }
 
         public ActionResult RenderDimension(PositionalContentModel data, PositionalContentItem item, PositionalContentItemDimension dimension)
         {
             var model = new PositionalContentItemViewModel() { Content = item.GetContents(data.DtdGuid, dimension), Settings = item.GetSettings(data.DtdGuid, dimension) };
-            return View("/views/Partials/PositionalContent/Base.cshtml", model);
+            return PartialView("/views/Partials/PositionalContent/Base.cshtml", model);
         }
 
     }

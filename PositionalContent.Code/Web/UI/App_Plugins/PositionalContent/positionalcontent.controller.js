@@ -57,6 +57,9 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
         var currentSection = appState.getSectionState("currentSection");
         var parentScope = $scope;
         var nodeContext = undefined;
+        var isInGrid = false;
+        var isInBlockList = false;
+
         while (!nodeContext && parentScope.$id !== $rootScope.$id) {
             parentScope = parentScope.$parent;
             nodeContext = parentScope.nodeContext;
@@ -71,17 +74,21 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
 
         $scope.model.value.dtdGuid = '00000000-0000-0000-0000-000000000000';
         //specific to le blender / grids
-        if ($scope.property.dataTypeGuid)
+        if ($scope.property.dataTypeGuid) {
             $scope.model.value.dtdGuid = $scope.property.dataTypeGuid;
+            isInGrid = true;
+        }
 
         //specific to blocklist
-        if ($scope.umbProperty.elementKey)
+        if ($scope.umbProperty.property) {
             $scope.model.value.dtdGuid = $scope.umbProperty.property.dataTypeKey;
+            $scope.property = $scope.umbProperty.property;
+            isInBlockList = true;
+        }
 
         var setupContentConfig = function (contentDataType, config, property) {
 
-            if (config[contentDataType] && config[contentDataType].guid != '00000000-0000-0000-0000-000000000000')
-            {
+            if (config[contentDataType] && config[contentDataType].guid != '00000000-0000-0000-0000-000000000000') {
                 resources.getDataTypeById(config[contentDataType].guid).then(function (dataType) {
 
                     property[contentDataType] = {};
@@ -101,8 +108,11 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
 
         resources.getDataTypeByAlias(currentSection, nodeContext.contentTypeAlias, propAlias)
             .then(function (dataType2) {
-                if (dataType2 && dataType2.guid)
-                    $scope.model.value.dtdGuid = dataType2.guid;
+                //only need this if positional content inline property
+                if (!isInBlockList && !isInGrid) {
+                    if (dataType2 && dataType2.guid)
+                        $scope.model.value.dtdGuid = dataType2.guid;
+                }
             })
             .then(function () {
                 //has to happen after we finish getting the dtd guid

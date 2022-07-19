@@ -74,6 +74,10 @@ angular.module("umbraco").controller("HiFi.PositionalContent.Controller", [
         if ($scope.property.dataTypeGuid)
             $scope.model.value.dtdGuid = $scope.property.dataTypeGuid;
 
+        //specific to blocklist
+        if ($scope.umbProperty.elementKey)
+            $scope.model.value.dtdGuid = $scope.umbProperty.property.dataTypeKey;
+
         var setupContentConfig = function (contentDataType, config, property) {
 
             if (config[contentDataType] && config[contentDataType].guid != '00000000-0000-0000-0000-000000000000')

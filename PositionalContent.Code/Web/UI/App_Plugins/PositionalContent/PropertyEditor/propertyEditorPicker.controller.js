@@ -7,7 +7,6 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyEditorPicke
     '$scope',
     'HiFi.PositionalContent.Resources',
     function ($scope, resources) {
-
         $scope.model.dataTypes = [];
         $scope.model.value = $scope.model.value;
 

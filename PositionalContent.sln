@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PositionalContent.Code", "PositionalContent.Code\PositionalContent.Code.csproj", "{F9064729-5279-4A71-B676-BFF2D897E1C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco", "Umbraco\Umbraco.csproj", "{47270890-D03C-47E0-A85A-A0775BC926A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F9064729-5279-4A71-B676-BFF2D897E1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9064729-5279-4A71-B676-BFF2D897E1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9064729-5279-4A71-B676-BFF2D897E1C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47270890-D03C-47E0-A85A-A0775BC926A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47270890-D03C-47E0-A85A-A0775BC926A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47270890-D03C-47E0-A85A-A0775BC926A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47270890-D03C-47E0-A85A-A0775BC926A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

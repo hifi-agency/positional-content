@@ -1,32 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.Composing;
 using System.Collections;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Web;
+using Umbraco.Extensions;
 
 namespace Hifi.PositionalContent
 {
     public class PositionalContentContentService
     {
+        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
         private readonly PropertyValueConverterCollection propertyValueConverters;
         private readonly IPublishedModelFactory publishedModelFactory;
         private readonly PositionalContentChildDataTypeService childDataTypeService;
         private readonly PropertyEditorCollection propertyEditors;
+        private readonly IPublishedContentTypeFactory _publishedContentTypeFactory;
 
-        public PositionalContentContentService(PropertyValueConverterCollection propertyValueConverters, 
+        public PositionalContentContentService(IUmbracoContextAccessor umbracoContextAccessor, PropertyValueConverterCollection propertyValueConverters, 
             IPublishedModelFactory publishedModelFactory, PositionalContentChildDataTypeService childDataTypeService,
-            PropertyEditorCollection propertyEditors)
+            PropertyEditorCollection propertyEditors, IPublishedContentTypeFactory publishedContentTypeFactory )
         {
+            _umbracoContextAccessor = umbracoContextAccessor;
             this.propertyValueConverters = propertyValueConverters;
             this.publishedModelFactory = publishedModelFactory;
             this.childDataTypeService = childDataTypeService;
             this.propertyEditors = propertyEditors;
+            _publishedContentTypeFactory = publishedContentTypeFactory;
         }
 
         public T Value<T>(Guid dtdGuid, object value, PositionalContentDataTypes type)
@@ -56,7 +58,9 @@ namespace Hifi.PositionalContent
                     targetDataType.Id,
                     targetDataType.EditorAlias);
 
-                var inPreviewMode = Current.UmbracoContext.InPreviewMode;
+                var inPreviewMode = false;
+                if(_umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext))
+                    inPreviewMode = umbracoContext.InPreviewMode;
 
                 var source = properyType.ConvertSourceToInter(null, value, inPreviewMode);
 
@@ -99,7 +103,7 @@ namespace Hifi.PositionalContent
 
         public PublishedPropertyType CreateDummyPropertyType(int dataTypeId, string editorAlias)
         {
-            return new PublishedPropertyType(editorAlias, dataTypeId, false, ContentVariation.Nothing, propertyValueConverters, publishedModelFactory, Current.PublishedContentTypeFactory);
+            return new PublishedPropertyType(editorAlias, dataTypeId, false, ContentVariation.Nothing, propertyValueConverters, publishedModelFactory, _publishedContentTypeFactory);
         }
 
     }

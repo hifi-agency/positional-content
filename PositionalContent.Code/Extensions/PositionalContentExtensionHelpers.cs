@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Umbraco.Web;
-
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
 using System.Globalization;
-using Umbraco.Web.Composing;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Extensions;
 
 namespace Hifi.PositionalContent
 {
@@ -45,20 +42,20 @@ namespace Hifi.PositionalContent
             return item.Dimensions.Select(x => x.Value).FirstOrDefault();
         }
 
-        public static string ImageUrl(this PositionalContentBreakpoint breakpoint, PositionalContentModel model, bool leaveOffCropSettings = false, int multiplier = 1)
+        public static string ImageUrl(this PositionalContentBreakpoint breakpoint, PositionalContentModel model, UmbracoHelper umbracoHelper, bool leaveOffCropSettings = false, int multiplier = 1)
         {
-            var image = breakpoint.Image(model);
+            var image = breakpoint.Image(model, umbracoHelper);
             if(image != null)
             {
                 if (leaveOffCropSettings)
-                    return image.Url;
+                    return image.Url();
                 else
-                    return string.Format("{0}{1}", image.Url, breakpoint.CropSettings(multiplier));
+                    return string.Format("{0}{1}", image.Url(), breakpoint.CropSettings(multiplier));
             }
             return string.Empty;
         }
 
-        public static IPublishedContent Image(this PositionalContentBreakpoint breakpoint, PositionalContentModel model)
+        public static IPublishedContent Image(this PositionalContentBreakpoint breakpoint, PositionalContentModel model, UmbracoHelper umbracoHelper)
         {
             if(breakpoint != null)
             {
@@ -69,7 +66,7 @@ namespace Hifi.PositionalContent
                     if (image != null)
                         imageId = image.ImageId;
                 }
-                return Current.UmbracoHelper.Media(imageId);
+                return umbracoHelper.Media(imageId);
             }
             return null;
         }

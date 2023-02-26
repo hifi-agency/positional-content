@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Web.Mvc;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.Editors;
-using Umbraco.Web.Mvc;
-using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Umbraco.Cms.Core.Cache;
+using Umbraco.Cms.Core.Logging;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Infrastructure.Persistence;
+using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Website.Controllers;
 
 namespace Hifi.PositionalContent
 {
-    [PluginController("PositionalContent")]
-    public class PositionalContentController : SurfaceController
+    public class PositionalContentRenderItemViewComponent : ViewComponent
     {
-
-        public ActionResult RenderItem(PositionalContentModel data, PositionalContentItem item)
+        public async Task<IViewComponentResult> InvokeAsync(PositionalContentModel data, PositionalContentItem item)
         {
             var model = new PositionalContentItemViewModel() { Content = item.GetContents(data), Settings = item.GetSettings(data) };
             return View("/views/Partials/PositionalContent/Base.cshtml", model);
         }
-
-        public ActionResult RenderDimension(PositionalContentModel data, PositionalContentItem item, PositionalContentItemDimension dimension)
+    }
+    
+    public class PositionalContentRenderDimensionViewComponent : ViewComponent
+    {
+        public async Task<IViewComponentResult> InvokeAsync(PositionalContentModel data, PositionalContentItem item, PositionalContentItemDimension dimension)
         {
             var model = new PositionalContentItemViewModel() { Content = item.GetContents(data.DtdGuid, dimension), Settings = item.GetSettings(data.DtdGuid, dimension) };
             return View("/views/Partials/PositionalContent/Base.cshtml", model);
         }
-
     }
 }

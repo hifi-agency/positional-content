@@ -1,75 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ClientDependency.Core;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.Editors;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Core.Services;
-using Umbraco.Web.PropertyEditors;
-using Umbraco.Web.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.IO;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Editors;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Serialization;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Strings;
+using Umbraco.Cms.Core.WebAssets;
+using Umbraco.Cms.Infrastructure.Serialization;
+using Umbraco.Cms.Infrastructure.WebAssets;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Extensions;
 
 namespace Hifi.PositionalContent
 {
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/breakpoint/breakpoint.service.js", Priority = 11)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/breakpoint/breakpoint.directive.js", Priority = 12)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/breakpointControls/breakpointControls.service.js", Priority = 13)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/breakpointControls/breakpointControls.directive.js", Priority = 14)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/cropper/cropper.service.js", Priority = 15)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/cropper/cropper.directive.js", Priority = 16)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/contentEditor/positionalcontenteditor.controller.js", Priority = 2)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/directives/imageOnLoad.directive.js", Priority = 6)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/directives/move.directive.js", Priority = 7)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/directives/resize.directive.js", Priority = 8)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/directives/selectOnClick.directive.js", Priority = 9)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/globalControls/globalControls.directive.js", Priority = 17)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/globalControls/globalControls.service.js", Priority = 17)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/item/item.service.js", Priority = 18)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/item/item.directive.js", Priority = 19)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/propertyEditor/propertyEditorBreakpoint.controller.js", Priority = 3)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/propertyEditor/propertyEditorPicker.controller.js", Priority = 4)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/propertyEditor/propertyEditorInitialDimensions.controller.js", Priority = 5)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/resources/resources.js", Priority = 10)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/services/image.service.js", Priority = 21)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/services/premium.service.js", Priority = 20)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/services/scale.service.js", Priority = 22)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/services/util.service.js", Priority = 23)]
-    [PropertyEditorAsset(ClientDependencyType.Javascript, "~/App_Plugins/PositionalContent/positionalcontent.controller.js", Priority = 1)]
-    [PropertyEditorAsset(ClientDependencyType.Css, "~/App_Plugins/PositionalContent/positionalcontent-backoffice.css", Priority = 24)]
-    [DataEditor("HiFi.PositionalContent", "Positional Content", "~/App_Plugins/PositionalContent/positionalcontent.html", ValueType = ValueTypes.Json)]
+    [DataEditor("HiFi.PositionalContent", "Positional Content",
+        "../App_Plugins/PositionalContent/positionalcontent.html", ValueType = ValueTypes.Json)]
     public class PositionalContentPropertyEditor : DataEditor
     {
+        private readonly IUmbracoBuilder _umbracoBuilder;
+        private readonly IEditorConfigurationParser _editorConfigurationParser;
+        private readonly PropertyEditorCollection _propertyEditorCollection;
+        private readonly IDataTypeService _dataTypeService;
+        private readonly IUmbracoHelperAccessor _umbracoHelperAccessor;
+        private readonly ILocalizedTextService _localizedTextService;
+        private readonly IIOHelper _ioHelper;
+        private readonly IShortStringHelper _shortStringHelper;
         private readonly ILogger logger;
         private readonly PositionalContentChildDataTypeService childDataTypeService;
 
-        public PositionalContentPropertyEditor(ILogger logger, PositionalContentChildDataTypeService childDataTypeService)
-        : base(logger)
+
+        public PositionalContentPropertyEditor(
+            PositionalContentChildDataTypeService positionalContentChildDataTypeService,
+            IEditorConfigurationParser editorConfigurationParser, PropertyEditorCollection propertyEditorCollection,
+            IDataTypeService dataTypeService, IDataValueEditorFactory dataValueEditorFactory,
+            IUmbracoHelperAccessor umbracoHelperAccessor, ILocalizedTextService localizedTextService,
+            IIOHelper ioHelper, IShortStringHelper shortStringHelper) : base(dataValueEditorFactory)
         {
-            this.logger = logger;
-            this.childDataTypeService = childDataTypeService;
+            _editorConfigurationParser = editorConfigurationParser;
+            _propertyEditorCollection = propertyEditorCollection;
+            _dataTypeService = dataTypeService;
+            _umbracoHelperAccessor = umbracoHelperAccessor;
+            _localizedTextService = localizedTextService;
+            _ioHelper = ioHelper;
+            _shortStringHelper = shortStringHelper;
+            childDataTypeService = positionalContentChildDataTypeService;
         }
 
-        protected override IConfigurationEditor CreateConfigurationEditor() => new PositionalContentConfigurationEditor();
+
+        protected override IConfigurationEditor CreateConfigurationEditor() =>
+            new PositionalContentConfigurationEditor(_ioHelper, _editorConfigurationParser);
 
         #region Value Editor
 
-        protected override IDataValueEditor CreateValueEditor() => new PositionalContentPropertyValueEditor(Attribute, logger, childDataTypeService);
+        protected override IDataValueEditor CreateValueEditor() => new PositionalContentPropertyValueEditor(
+            _propertyEditorCollection, _dataTypeService, _umbracoHelperAccessor, _localizedTextService,
+            _shortStringHelper, childDataTypeService, new JsonNetSerializer());
 
         internal class PositionalContentPropertyValueEditor : DataValueEditor
         {
             private readonly ILogger logger;
+            private readonly IShortStringHelper _shortStringHelper;
+            private readonly PropertyEditorCollection _propertyEditorCollection;
+            private readonly IDataTypeService _dataTypeService;
+            private readonly IUmbracoHelperAccessor _umbracoHelperAccessor;
             private readonly PositionalContentChildDataTypeService childDataTypeService;
 
-            public PositionalContentPropertyValueEditor(DataEditorAttribute attribute, ILogger logger, PositionalContentChildDataTypeService childDataTypeService)
-                : base(attribute)
-            {
-                this.logger = logger;
-                this.childDataTypeService = childDataTypeService;
-            }
 
             public override object Configuration
             {
@@ -79,14 +79,16 @@ namespace Hifi.PositionalContent
                     if (value == null)
                         throw new ArgumentNullException(nameof(value));
                     if (!(value is PositionalContentConfiguration configuration))
-                        throw new ArgumentException($"Expected a {typeof(PositionalContentConfiguration).Name} instance, but got {value.GetType().Name}.", nameof(value));
+                        throw new ArgumentException(
+                            $"Expected a {typeof(PositionalContentConfiguration).Name} instance, but got {value.GetType().Name}.",
+                            nameof(value));
                     base.Configuration = value;
 
                     HideLabel = configuration.HideLabel.TryConvertTo<bool>().Result;
                 }
             }
 
-            public override string ConvertDbToString(PropertyType propertyType, object propertyValue, IDataTypeService dataTypeService)
+            public override string ConvertDbToString(IPropertyType propertyType, object? propertyValue)
             {
                 if (propertyValue == null || propertyValue.ToString().IsNullOrWhiteSpace())
                     return string.Empty;
@@ -96,48 +98,49 @@ namespace Hifi.PositionalContent
                 try
                 {
                     var value = JsonConvert.DeserializeObject<PositionalContentModel>(propertyValue.ToString());
-                    if (value!= null)
+                    if (value != null)
                     {
-                        AssignValuesToDb(value, dataTypeService, AssignValueDbToString);
+                        AssignValuesToDb(value, _dataTypeService, AssignValueDbToString);
 
                         outputValue = JsonConvert.SerializeObject(value);
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.Error<PositionalContentPropertyValueEditor>(string.Format("Error converting DB value to String for - {0}", propertyValue.ToString()), ex);
+                    logger.LogError(
+                        string.Format("Error converting DB value to String for - {0}", propertyValue.ToString()), ex);
                 }
 
-                return base.ConvertDbToString(propertyType, outputValue, dataTypeService);
+                return base.ConvertDbToString(propertyType, outputValue);
             }
 
-
-
-            public override object ToEditor(Property property, IDataTypeService dataTypeService, string culture = null, string segment = null)
+            public override object? ToEditor(IProperty property, string? culture = null, string? segment = null)
             {
                 var val = property.GetValue(culture, segment);
                 if (val == null || string.IsNullOrWhiteSpace(val.ToString()))
                     return string.Empty;
 
+
                 try
                 {
-                    var value = JsonConvert.DeserializeObject<PositionalContentModel>(property.GetValue(culture, segment).ToString());
+                    var value = JsonConvert.DeserializeObject<PositionalContentModel>(property
+                        .GetValue(culture, segment).ToString());
                     FixImageIds(value);
                     if (value.Items != null)
                     {
-
-                        AssignValuesToDb(value, dataTypeService, AssignValueDbToEditor);
+                        AssignValuesToDb(value, _dataTypeService, AssignValueDbToEditor);
 
                         property.SetValue(JsonConvert.SerializeObject(value));
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.Error<PositionalContentPropertyValueEditor>(string.Format("Error converting DB value to Editor - {0}", val), ex);
+                    logger.LogError(string.Format("Error converting DB value to Editor - {0}", val), ex);
                 }
 
-                return base.ToEditor(property, dataTypeService, culture, segment);
+                return base.ToEditor(property, culture, segment);
             }
+
 
             public override object FromEditor(ContentPropertyData editorValue, object currentValue)
             {
@@ -154,13 +157,13 @@ namespace Hifi.PositionalContent
                 }
                 catch (Exception ex)
                 {
-                    logger.Error<PositionalContentPropertyValueEditor>(string.Format("Error converting DB value to Editor - {0}", editorValue.Value), ex);
+                    logger.LogError($"Error converting DB value to Editor - {editorValue.Value}", ex);
                 }
 
                 return base.FromEditor(editorValue, currentValue);
             }
 
-            protected object AssignValueDbToString(ChildDataType datatype, object rawData, IDataTypeService dataTypeService)
+            protected object AssignValueDbToString(ChildDataType datatype, object rawData)
             {
                 var prop = new Property(datatype.PropertyType);
 
@@ -168,67 +171,67 @@ namespace Hifi.PositionalContent
                 if (rawData != null)
                     prop.SetValue(rawData);
 
-                var newValue = datatype.ValueEditor.ConvertDbToString(prop.PropertyType, rawData, dataTypeService);
+                var newValue = datatype.ValueEditor.ConvertDbToString(prop.PropertyType, rawData);
                 return newValue;
             }
 
-            protected object AssignValueDbToEditor(ChildDataType datatype, object rawData, IDataTypeService dataTypeService)
+            protected object AssignValueDbToEditor(ChildDataType datatype, object rawData)
             {
                 var prop = new Property(datatype.PropertyType);
-                
+
                 //culture?
                 if (rawData != null)
                     prop.SetValue(rawData);
 
-                var newValue = datatype.ValueEditor.ToEditor(prop, dataTypeService);
+                var newValue = datatype.ValueEditor.ToEditor(prop);
                 return (newValue == null) ? null : JToken.FromObject(newValue);
-
             }
 
-            protected object AssignEditorToDb(ChildDataType datatype, object rawData, IDataTypeService dataTypeService)
+            protected object AssignEditorToDb(ChildDataType datatype, object rawData)
             {
                 var propData = new ContentPropertyData(rawData, datatype.PreValues);
                 var newValue = datatype.ValueEditor.FromEditor(propData, rawData);
                 return (newValue == null) ? null : JToken.FromObject(newValue);
             }
 
-            protected void AssignValuesToDb(PositionalContentModel content, IDataTypeService dataTypeService, Func<ChildDataType, object, IDataTypeService, object> valueProcessor)
+            protected void AssignValuesToDb(PositionalContentModel content, IDataTypeService dataTypeService,
+                Func<ChildDataType, object, object> valueProcessor)
             {
                 var imageContent = GetDataTypeToDb(content.DtdGuid, Constants.ImageContentDataType);
                 var imageSettings = GetDataTypeToDb(content.DtdGuid, Constants.ImageSettingsDataType);
                 var itemContent = GetDataTypeToDb(content.DtdGuid, Constants.ItemContentDataType);
                 var itemSettings = GetDataTypeToDb(content.DtdGuid, Constants.ItemSettingsDataType);
 
-                if(imageContent != null)
-                    content.content = valueProcessor(imageContent, content.content, dataTypeService);
+                if (imageContent != null)
+                    content.content = valueProcessor(imageContent, content.content);
 
                 if (itemSettings != null)
-                    content.settings = valueProcessor(itemSettings, content.settings, dataTypeService);
+                    content.settings = valueProcessor(itemSettings, content.settings);
 
                 foreach (var breakpoint in content.Breakpoints)
                 {
                     if (imageContent != null)
-                        breakpoint.Value.content = valueProcessor(imageContent, breakpoint.Value.content, dataTypeService);
+                        breakpoint.Value.content = valueProcessor(imageContent, breakpoint.Value.content);
 
                     if (imageSettings != null)
-                        breakpoint.Value.settings = valueProcessor(imageSettings, breakpoint.Value.settings, dataTypeService);
+                        breakpoint.Value.settings = valueProcessor(imageSettings, breakpoint.Value.settings);
                 }
 
                 foreach (var item in content.Items)
                 {
-                    if(itemContent != null)
-                        item.content = valueProcessor(itemContent, item.content, dataTypeService);
+                    if (itemContent != null)
+                        item.content = valueProcessor(itemContent, item.content);
 
                     if (itemSettings != null)
-                        item.settings = valueProcessor(itemSettings, item.settings, dataTypeService);
+                        item.settings = valueProcessor(itemSettings, item.settings);
 
                     foreach (var dimension in item.Dimensions)
                     {
                         if (itemContent != null)
-                            dimension.Value.content = valueProcessor(itemContent, dimension.Value.content, dataTypeService);
+                            dimension.Value.content = valueProcessor(itemContent, dimension.Value.content);
 
                         if (itemSettings != null)
-                            dimension.Value.settings = valueProcessor(itemSettings, dimension.Value.settings, dataTypeService);
+                            dimension.Value.settings = valueProcessor(itemSettings, dimension.Value.settings);
                     }
                 }
             }
@@ -238,8 +241,8 @@ namespace Hifi.PositionalContent
                 var dtd = childDataTypeService.Get(dtdGuid, property);
                 if (dtd != null)
                 {
-                    var propType = new PropertyType(dtd);
-                    var propEditor = Current.PropertyEditors[dtd.EditorAlias];
+                    var propType = new PropertyType(_shortStringHelper, dtd);
+                    var propEditor = _propertyEditorCollection[dtd.EditorAlias];
                     var valEditor = propEditor.GetValueEditor(dtd.Configuration);
 
                     return new ChildDataType()
@@ -252,17 +255,19 @@ namespace Hifi.PositionalContent
                         Config = propEditor.DefaultConfiguration
                     };
                 }
+
                 return null;
             }
 
             protected void FixImageIds(PositionalContentModel model)
             {
-                if(model != null)
+                if (model != null)
                 {
-                    if(model.PrimaryImage != null)
+                    if (model.PrimaryImage != null)
                     {
                         model.PrimaryImage.ImageId = FixImageId(model.PrimaryImage.ImageId);
                     }
+
                     foreach (var i in model.Breakpoints)
                     {
                         i.Value.ImageId = FixImageId(i.Value.ImageId);
@@ -272,17 +277,31 @@ namespace Hifi.PositionalContent
 
             protected string FixImageId(string input)
             {
-                if (input != null && input.Length < 6)
+                if (input != null && input.Length < 6 && !_umbracoHelperAccessor.TryGetUmbracoHelper(out var helper))
                 {
-                    var currentImage = Current.UmbracoHelper.Media(input);
+                    var currentImage = helper.Media(input);
                     if (currentImage != null)
                     {
                         return currentImage.Key.ToString();
                     }
                 }
+
                 return input;
             }
 
+            public PositionalContentPropertyValueEditor(PropertyEditorCollection propertyEditorCollection,
+                IDataTypeService dataTypeService, IUmbracoHelperAccessor umbracoHelperAccessor,
+                ILocalizedTextService localizedTextService, IShortStringHelper shortStringHelper,
+                PositionalContentChildDataTypeService childDataTypeService, IJsonSerializer? jsonSerializer) : base(
+                localizedTextService, shortStringHelper, jsonSerializer)
+            {
+                _shortStringHelper = shortStringHelper;
+                _propertyEditorCollection = propertyEditorCollection;
+                _dataTypeService = dataTypeService;
+                _umbracoHelperAccessor = umbracoHelperAccessor;
+                this.childDataTypeService = childDataTypeService;
+                this.View = "../App_Plugins/PositionalContent/positionalcontent.html";
+            }
         }
 
         #endregion

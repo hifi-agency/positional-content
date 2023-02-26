@@ -1,18 +1,31 @@
 ﻿@using Hifi.PositionalContent;
-@using ClientDependency.Core.Mvc
-@model PositionalContentModel
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<PositionalContentModel>
 @{
     var breakpoints = Model.BreakpointsAsList().ToList();
     var cssRoot = "positional-content";
     var cssSpecific = Model.CssNamespace;
 
-    Html.RequiresCss("~/App_Plugins/PositionalContent/positionalcontent-frontend.css");
+    SmidgeHelper.RequiresCss("~/App_Plugins/PositionalContent/positionalcontent-frontend.css");
+    
+    string DimensionContentSetting(Dictionary<string, PositionalContentItemDimension> dimensions, string cssRoot, string cssSpecific)
+    {
+        var output = new System.Text.StringBuilder();
+        foreach (var d in dimensions)
+        {
+            if ((d.Value.OverrideContent && d.Value.HasContent) || (d.Value.OverrideSettings && d.Value.HasSettings) || d.Value.Hide)
+            {
+                output.AppendFormat(" {0}-dimensions-{1}__content-hidden--{2}", cssRoot, cssSpecific, d.Key);
+            }
+        }
+        return output.ToString();
+    }
 }
 
 @* NOTE: This RenderJsHere code should be put on your main template page where the rest of your script tags are placed *@
-@Html.RenderCssHere()
+@SmidgeHelper.CssHereAsync()
 
-<style type="text/css">
+<style lang="css" rel="stylesheet">
     @Html.Partial("PositionalContentCss")
 </style>
 
@@ -23,18 +36,18 @@
             var index = breakpoints.IndexOf(b);
             if (index == 0)
             {
-                <source media="(min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model)">
+                <source media="(min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model, Umbraco)">
             }
             else if (index == breakpoints.Count - 1)
             {
-                <source media="(max-width: @(b.BreakpointUpper)px)" srcset="@b.ImageUrl(Model)">
+                <source media="(max-width: @(b.BreakpointUpper)px)" srcset="@b.ImageUrl(Model, Umbraco)">
             }
             else
             {
-                <source media="(max-width: @(b.BreakpointUpper)px) and (min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model)">
+                <source media="(max-width: @(b.BreakpointUpper)px) and (min-width: @(b.BreakpointLower)px)" srcset="@b.ImageUrl(Model, Umbraco)">
             }
         }
-        <img class="@(cssRoot)__image-inner" src="@breakpoints.FirstOrDefault().ImageUrl(Model)" alt="">
+        <img class="@(cssRoot)__image-inner" src="@breakpoints.FirstOrDefault().ImageUrl(Model, Umbraco)" alt="">
     </picture>
     <figcaption class="@(cssRoot)__content">
         @foreach (var i in Model.Items)
@@ -46,8 +59,11 @@
                 @Html.Raw(string.Format("<div class='{0}-dimensions__wrapper {0}-dimensions-{1}__wrapper--{2}' style='{3}'>", cssRoot, cssSpecific, d.Key, d.Value.PositionalStylesAsString()))
             }
 
-            <div class="@(cssRoot)-dimensions__content @DimensionContentSetting(i.Dimensions, cssRoot, cssSpecific)">
-                @{Html.RenderAction("RenderItem", "PositionalContent", new { data = Model, item = i, area = "PositionalContent" });}
+            var dimensionContentSetting = DimensionContentSetting(i.Dimensions, cssRoot, cssSpecific);
+            
+            
+            <div class="@(cssRoot)-dimensions__content @dimensionContentSetting">
+                <vc:positional-content-render-item item="i" data="Model" />
             </div>
 
             foreach (var d in i.Dimensions)
@@ -56,7 +72,7 @@
                 {
                     @Html.Raw(string.Format("<div class='{0}-dimensions__content-override {0}-dimensions-{1}__content-override--{2}'>", cssRoot, cssSpecific, d.Key))
                     <text>
-                        @{Html.RenderAction("RenderDimension", "PositionalContent", new { data = Model, item = i, dimension = d.Value, area = "PositionalContent" });}
+                        <vc:positional-content-render-dimension item="i" data="d" dimension="d.Value" />
                     </text>
                     @Html.Raw("</div>")
                 }
@@ -71,20 +87,4 @@
         }
     </figcaption>
 </figure>
-
-
-@functions {
-    public string DimensionContentSetting(Dictionary<string, PositionalContentItemDimension> dimensions, string cssRoot, string cssSpecific)
-    {
-        var output = new System.Text.StringBuilder();
-        foreach (var d in dimensions)
-        {
-            if ((d.Value.OverrideContent && d.Value.HasContent) || (d.Value.OverrideSettings && d.Value.HasSettings) || d.Value.Hide)
-            {
-                output.AppendFormat(" {0}-dimensions-{1}__content-hidden--{2}", cssRoot, cssSpecific, d.Key);
-            }
-        }
-        return output.ToString();
-    }
-}
 

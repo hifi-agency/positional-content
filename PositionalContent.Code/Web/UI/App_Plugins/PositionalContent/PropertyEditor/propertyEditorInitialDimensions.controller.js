@@ -7,7 +7,6 @@ angular.module("umbraco").controller("HiFi.PositionalContent.PropertyEditorIniti
     '$scope',
     'editorService',
     function ($scope, editorService) {
-
         $scope.openDimensionDialog = function () {
             editorService.open({
                 view: '../App_Plugins/PositionalContent/contenteditor/positionalcontenteditor.dimension.html',

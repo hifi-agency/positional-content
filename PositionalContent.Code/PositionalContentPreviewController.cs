@@ -1,32 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Web.Mvc;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.Editors;
-using Umbraco.Web.Mvc;
 using Newtonsoft.Json;
-using Umbraco.Core.Composing;
+using Microsoft.AspNetCore.Mvc;
+using Umbraco.Cms.Web.Common.Controllers;
 
 namespace Hifi.PositionalContent
 {
-    [PluginController("PositionalContent")]
-    public class PositionalContentPreviewController : UmbracoAuthorizedController
+    public class PositionalContentPreviewController : UmbracoController
     {
-        [ValidateInput(false)]
         [HttpPost]
         public ActionResult GetPartialViewResultAsHtmlForEditor()
         {
-            var itemStr = Request["item"];
-            var breakpointName = Request["breakpointName"];
-            var previewModifierClass = Request["previewModifierClass"];
-            var dtdGuid = Guid.Parse(Request["dtdGuid"]);
-            var view = Request["view"];
+            var itemStr = Request.Form["item"];
+            var breakpointName = Request.Form["breakpointName"];
+            var previewModifierClass = Request.Form["previewModifierClass"];
+            var dtdGuid = Guid.Parse(Request.Form["dtdGuid"]);
+            var view = Request.Form["view"];
 
             var item = JsonConvert.DeserializeObject<PositionalContentItem>(itemStr);
             var dimension = item.Dimensions[breakpointName];

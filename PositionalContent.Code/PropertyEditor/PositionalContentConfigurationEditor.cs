@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Umbraco.Core.PropertyEditors;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Umbraco.Cms.Core.IO;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Services;
 
 namespace Hifi.PositionalContent
 {
@@ -21,10 +20,10 @@ namespace Hifi.PositionalContent
                 HeightAuto = true
             }
         };
+        
 
-        public override PositionalContentConfiguration FromConfigurationEditor(IDictionary<string, object> editorValues, PositionalContentConfiguration configuration)
+        public PositionalContentConfigurationEditor(IIOHelper ioHelper, IEditorConfigurationParser editorConfigurationParser) : base(ioHelper, editorConfigurationParser)
         {
-            return base.FromConfigurationEditor(editorValues, configuration);
         }
     }
 }

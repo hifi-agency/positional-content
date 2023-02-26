@@ -298,3 +298,5 @@ BuildPackage/artifacts/
 !BuildPackage/
 !BuildPackage/Tools/
 !BuildPackage/Tools/**/*.dll
+
+Umbraco/

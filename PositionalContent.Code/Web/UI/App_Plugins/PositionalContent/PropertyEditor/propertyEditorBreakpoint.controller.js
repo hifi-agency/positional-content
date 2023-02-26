@@ -6,7 +6,6 @@
 angular.module("umbraco").controller("HiFi.PositionalContent.PropertyBreakpoints", [
     '$scope',
     function ($scope) {
-
         $scope.add = function () {
             $scope.model.value.push({
                 name: "",

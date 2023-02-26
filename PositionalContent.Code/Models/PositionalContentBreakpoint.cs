@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
-using Umbraco.Web;
-
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
 
 namespace Hifi.PositionalContent
 {
@@ -60,7 +54,8 @@ namespace Hifi.PositionalContent
         {
             return Settings<T>(dtdGuid, PositionalContentDataTypes.ImageSettings);
         }
-        
+
+       
     }
     
 }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Umbraco.Web;
-
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Hifi.PositionalContent
 {

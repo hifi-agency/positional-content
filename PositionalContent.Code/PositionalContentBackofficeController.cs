@@ -1,33 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Web.Http;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.Editors;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.Composing;
+using System.Net.Http;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
 
 namespace Hifi.PositionalContent
 {
     [PluginController("PositionalContentApi")]
-    public class PositionalContentBackofficeController : UmbracoAuthorizedJsonController
+    public class PositionalContentBackofficeController : UmbracoAuthorizedApiController 
     {
         private readonly PropertyEditorCollection propertyEditors;
+        private readonly IDataTypeService _dataTypeService;
+        private readonly IMemberTypeService _memberTypeService;
+        private readonly IContentTypeService _contentTypeService;
 
-        public PositionalContentBackofficeController(PropertyEditorCollection propertyEditors)
+        public PositionalContentBackofficeController(PropertyEditorCollection propertyEditors, IDataTypeService dataTypeService, IMemberTypeService memberTypeService, IContentTypeService contentTypeService)
         {
             this.propertyEditors = propertyEditors;
+            _dataTypeService = dataTypeService;
+            _memberTypeService = memberTypeService;
+            _contentTypeService = contentTypeService;
         }
 
-        public IEnumerable<object> GetNestedContentDataTypes()
+        public IEnumerable<object> GetBlockListDataTypes()
         {
-            var r = Services.DataTypeService.GetAll()
-                .Where(x => x.EditorAlias == "Our.Umbraco.NestedContent" || x.EditorAlias == "Umbraco.NestedContent")
+            var r = _dataTypeService.GetAll()
+                //TODO change nestedContent to blocklist
+                .Where(x =>  x.EditorAlias == "Umbraco.BlockList")
                 .OrderBy(x => x.Name)
                 .Select(x => new
                 {
@@ -50,7 +54,7 @@ namespace Hifi.PositionalContent
         {
             if(id != new Guid())
             {
-                var dtd = Services.DataTypeService.GetDataType(id);
+                var dtd = _dataTypeService.GetDataType(id);
                 return FormatDataType(dtd);
             }
             return null;
@@ -60,19 +64,19 @@ namespace Hifi.PositionalContent
         {
             IContentTypeComposition ct = null;
 
-            var r = Services.DataTypeService.GetAll()
+            var r = _dataTypeService.GetAll()
                 .Where(x => x.EditorAlias == "HiFi.PositionalContent").ToList();
 
             switch (contentType)
             {
                 case "member":
-                    ct = Services.MemberTypeService.Get(contentTypeAlias);
+                    ct = _memberTypeService.Get(contentTypeAlias);
                     break;
                 case "content":
-                    ct = Services.ContentTypeService.Get(contentTypeAlias);
+                    ct = _contentTypeService.Get(contentTypeAlias);
                     break;
                 case "media":
-                    ct = Services.ContentTypeService.Get(contentTypeAlias);
+                    ct = _contentTypeService.Get(contentTypeAlias);
                     break;
             }
 
@@ -83,14 +87,14 @@ namespace Hifi.PositionalContent
             if (prop == null)
                 return null;
 
-            var dtd = Services.DataTypeService.GetDataType(prop.DataTypeId);
+            var dtd = _dataTypeService.GetDataType(prop.DataTypeId);
             return FormatDataType(dtd);
         }
 
         protected object FormatDataType(IDataType dataType)
         {
             if (dataType == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpRequestException("", null, HttpStatusCode.NotFound);
 
             var propEditor = propertyEditors[dataType.EditorAlias];
             var config = propEditor.GetConfigurationEditor().ToValueEditor(dataType.Configuration);

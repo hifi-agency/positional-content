@@ -10,6 +10,9 @@ angular.module("umbraco").controller("HiFi.PositionalContentDialogController", [
     'HiFi.PositionalContent.BreakpointService',
     'HiFi.PositionalContent.CropperService',
     'HiFi.PositionalContent.ItemService',
+    'umbVariantContent',
+    'umbVariantContentEditors',
+    'umbElementEditorContent',
     function ($scope, editorService, imageService, breakpointService, cropperService, itemService) {
 
         $scope.tabs = [],

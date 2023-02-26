@@ -8,7 +8,7 @@ angular.module('umbraco.resources').factory('HiFi.PositionalContent.Resources',
         return {
             getNestedContentDataTypes: function () {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(Umbraco.Sys.ServerVariables.positionalcontent.apiBaseUrl + 'GetNestedContentDataTypes'),
+                    $http.get(Umbraco.Sys.ServerVariables.positionalcontent.apiBaseUrl + 'GetBlockListDataTypes'),
                     'Failed to retrieve datatypes'
                 );
             },

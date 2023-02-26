@@ -1,0 +1,883 @@
+﻿{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Dependency Analysis",
+          "semanticVersion": "0.4.410601",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview",
+          "rules": [
+            {
+              "id": "UA103",
+              "name": "ReferenceToBeDeleted",
+              "fullDescription": {
+                "text": "References that need to be deleted in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            },
+            {
+              "id": "UA105",
+              "name": "PackageToBeDeleted",
+              "fullDescription": {
+                "text": "Packages that need to be deleted in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            },
+            {
+              "id": "UA106",
+              "name": "PackageToBeAdded",
+              "fullDescription": {
+                "text": "Packages that need to be added in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            },
+            {
+              "id": "UA108",
+              "name": "FrameworkReferenceToBeAdded",
+              "fullDescription": {
+                "text": "Framework Reference that need to be added in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Configuration needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.Extensions needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.Helpers needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.Mvc needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.Razor needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.WebPages needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.WebPages.Deployment needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA103",
+          "level": "note",
+          "message": {
+            "text": "Reference to System.Web.WebPages.Razor needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Identity.Core, Version=2.2.2 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Identity.Owin, Version=2.2.2 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Mvc, Version=5.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Razor, Version=3.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.WebApi.Core, Version=5.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.WebApi.WebHost, Version=5.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.WebPages, Version=3.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Owin, Version=4.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Owin.Host.SystemWeb, Version=4.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Owin.Security, Version=4.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Owin.Security.Cookies, Version=4.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Owin.Security.OAuth, Version=4.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Web.Infrastructure, Version=1.0.0.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Owin, Version=1.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package ClientDependency, Version=1.9.8 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Examine, Version=1.0.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package LightInject.Web, Version=2.0.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.WebApi.Client, Version=5.2.7 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Serilog, Version=2.8.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package SharpZipLib, Version=0.86.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package Superpower, Version=2.0.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package System.Diagnostics.DiagnosticSource, Version=4.4.1 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "level": "note",
+          "message": {
+            "text": "Package System.ValueTuple, Version=4.5.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package System.Configuration.ConfigurationManager, Version=5.0.0 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package ClientDependency, Version=1.9.10 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package Examine, Version=2.1.0 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Identity.Core, Version=2.2.3 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.AspNet.Razor, Version=3.2.9 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.Web.Infrastructure, Version=2.0.0 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "level": "note",
+          "message": {
+            "text": "Package Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.4.410601 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA108",
+          "level": "note",
+          "message": {
+            "text": "Framework Reference to Microsoft.AspNetCore.App needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContent.Code.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "API Upgradability",
+          "semanticVersion": "0.4.410601",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview",
+          "rules": [
+            {
+              "id": "UA0002",
+              "name": "Types should be upgraded",
+              "fullDescription": {
+                "text": "Types should be upgraded"
+              }
+            },
+            {
+              "id": "UA0005",
+              "name": "Do not use HttpContext.Current",
+              "fullDescription": {
+                "text": "Do not use HttpContext.Current"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "UA0002",
+          "level": "note",
+          "message": {
+            "text": "Type 'ActionResult' should be replaced with 'Microsoft.AspNetCore.Mvc.ActionResult'"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContentController.cs"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA0002",
+          "level": "note",
+          "message": {
+            "text": "Type 'ActionResult' should be replaced with 'Microsoft.AspNetCore.Mvc.ActionResult'"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContentController.cs"
+                },
+                "region": {
+                  "startLine": 27
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA0002",
+          "level": "note",
+          "message": {
+            "text": "Type 'ActionResult' should be replaced with 'Microsoft.AspNetCore.Mvc.ActionResult'"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/PositionalContentPreviewController.cs"
+                },
+                "region": {
+                  "startLine": 23
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA0005",
+          "level": "note",
+          "message": {
+            "text": "HttpContext does not have a Current property; get the context from a controller or use HttpContextAccessor instead"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/Events/PositionalContentServerVariableParser.cs"
+                },
+                "region": {
+                  "startLine": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA0005",
+          "level": "note",
+          "message": {
+            "text": "HttpContext does not have a Current property; get the context from a controller or use HttpContextAccessor instead"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/repos/positional-content/PositionalContent.Code/Events/PositionalContentServerVariableParser.cs"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Component Analysis",
+          "semanticVersion": "0.4.410601",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+        }
+      },
+      "results": [],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}

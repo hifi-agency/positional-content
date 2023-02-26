@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Web.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Umbraco.Cms.Core.Services;
+
 
 namespace Hifi.PositionalContent
 {
     public abstract class PositionalContentModelBase
     {
+
+     
         public virtual object content { get; set; }
 
         public virtual object settings { get; set; }
@@ -32,13 +36,14 @@ namespace Hifi.PositionalContent
 
         protected virtual T Content<T>(Guid dtdGuid, PositionalContentDataTypes type)
         {
-            var contentService = DependencyResolver.Current.GetService<PositionalContentContentService>();
+            
+            var contentService = PositionalContentContentServiceProvider.ServiceProvider.GetService<PositionalContentContentService>();
             return contentService.Value<T>(dtdGuid, content, type);
         }
 
         protected virtual T Settings<T>(Guid dtdGuid, PositionalContentDataTypes type)
         {
-            var contentService = DependencyResolver.Current.GetService<PositionalContentContentService>();
+            var contentService = PositionalContentContentServiceProvider.ServiceProvider.GetService<PositionalContentContentService>();
             return contentService.Value<T>(dtdGuid, settings, type);
         }
     }
